@@ -154,5 +154,31 @@ for num in range(10,20):  #to iterate between 10 to 20
          break #to move to the next number, the #first FOR
    else:                  # else part of the loop
       print num, 'is a prime number'
+###########################################################
+"""
+-----------------------File IO--------------------------
+"""
+############################################################
+ input() #functions reads data from keyboard as string
+ file object = open(file_name [, access_mode][, buffering])
+
+###########################################################
+"""
+-----------------------Class--------------------------
+"""
 ############################################################
 
+class Employee:
+   'Common base class for all employees'
+   empCount = 0
+
+   def __init__(self, name, salary):
+      self.name = name
+      self.salary = salary
+      Employee.empCount += 1
+   
+   def displayCount(self):
+     print "Total Employee %d" % Employee.empCount
+
+   def displayEmployee(self):
+      print "Name : ", self.name,  ", Salary: ", self.salary
