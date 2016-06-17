@@ -9,11 +9,7 @@
 
 # Definition for singly-linked list.
 
-
-class ListNode(object):
-    def __init__(self, x):
-        self.val = x
-        self.next = None
+import mylist
 
 
 class Solution(object):
@@ -24,7 +20,7 @@ class Solution(object):
         """
         if head is None or head.next is None:
             return head
-        dummy = ListNode(0)
+        dummy = mylist.ListNode(0)
         dummy.next = head
         p = dummy
         while p.next and p.next.next:
@@ -35,14 +31,7 @@ class Solution(object):
             p = p.next.next
         return dummy.next
 
-node_1 = ListNode('1')
-node_2 = ListNode('2')
-node_3 = ListNode('3')
-node_4 = ListNode('4')
-node_1.next = node_2
-node_2.next = node_3
-node_3.next = node_4
-l = node_1
-print l.val + " " + l.next.val + " " + l.next.next.val + " " + l.next.next.next.val
-l = Solution().swapPairs(node_1)
-print l.val + " " + l.next.val + " " + l.next.next.val + " " + l.next.next.next.val
+
+nodes = mylist.createList([1, 2, 3, 4])
+mylist.showList(nodes)
+mylist.showList(Solution().swapPairs(nodes))

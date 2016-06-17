@@ -1,11 +1,7 @@
-"""Reverse a singly linked list."""
+"""-*- coding: utf-8 -*-"""
+import mylist
 
-
-class ListNode(object):
-    """ Definition for singly-linked list."""
-    def __init__(self, x):
-        self.val = x
-        self.next = None
+"""206. Reverse a singly linked list."""
 
 
 class Solution(object):
@@ -50,16 +46,6 @@ class Solution(object):
         return rst
 
 
-node_1 = ListNode('1')
-node_2 = ListNode('2')
-node_3 = ListNode('3')
-node_4 = ListNode('4')
-node_1.next = node_2
-node_2.next = node_3
-node_3.next = node_4
-l = node_1
-print l.val + " " + l.next.val + " " + l.next.next.val + " " + l.next.next.next.val
-l = Solution().reverseList_iterative(node_1)
-print l.val + " " + l.next.val + " " + l.next.next.val + " " + l.next.next.next.val
-l = Solution().reverseList_recursive(l)
-print l.val + " " + l.next.val + " " + l.next.next.val + " " + l.next.next.next.val
+nodes = mylist.createList([1, 2, 3, 4])
+mylist.showList(nodes)
+mylist.showList(Solution().reverseList_iterative(nodes))
