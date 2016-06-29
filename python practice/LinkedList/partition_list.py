@@ -44,3 +44,6 @@ mylist.showList(Solution().partition(nodes, 3))
 nodes = mylist.createList([4, 2, 1, 3])
 mylist.showList(nodes)
 mylist.showList(Solution().partition(nodes, 3))
+
+# 解题思路
+

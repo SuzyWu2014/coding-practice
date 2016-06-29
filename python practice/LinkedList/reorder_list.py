@@ -73,3 +73,8 @@ mylist.showList(Solution().reorderList(nodes))
 nodes = mylist.createList([1, 2, 3, 4, 5, 6])
 mylist.showList(nodes)
 mylist.showList(Solution().reorderList(nodes))
+
+# 解题思路：
+# 找到中点
+# 反转右边
+# 连接左右两边

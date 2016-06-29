@@ -29,3 +29,7 @@ class Solution(object):
             even = even.next
         odd.next = evenHead
         return oddHead
+
+# 解题思路
+# 像这种把list的值分成两个部分的，可以给两个部分各自一个dummy head
+# 最后把左边的尾部练到右边的头部， 返回左边dummyhead.next

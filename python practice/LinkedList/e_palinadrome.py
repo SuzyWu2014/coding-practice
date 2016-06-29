@@ -38,3 +38,9 @@ class Solution(object):
         #     p = tmp
         # slow.next = last
         return p1 is None
+
+# 解题思路
+# 找到中点
+# reverse 右半部分
+# 对比
+# 注意点：reverse 产生的新的list是从最后一个开始，要记得set为None

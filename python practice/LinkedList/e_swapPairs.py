@@ -35,3 +35,6 @@ class Solution(object):
 nodes = mylist.createList([1, 2, 3, 4])
 mylist.showList(nodes)
 mylist.showList(Solution().swapPairs(nodes))
+
+# 解题思路：
+# 增加dummy head让所有的指针处理变得一样

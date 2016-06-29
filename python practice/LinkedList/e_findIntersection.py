@@ -42,3 +42,10 @@ class Solution(object):
             a = a.next
             b = b.next
         return a
+
+
+# 解题思路：
+# 题目是要返回intersection node，
+# intersection node 的特点就是两个linked list 的某个节点同时指向了这个node,
+# 问题在于两个list的长度不同的情况下，他们无法同时到达这个相交点
+# 这边的技巧就是找到长度的差值，然后使长的liinked list 先走一段

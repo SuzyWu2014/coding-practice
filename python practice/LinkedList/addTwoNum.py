@@ -27,3 +27,8 @@ class Solution(object):
         if carry == 1:
             l3.next = ListNode(1)
         return head.next
+
+# 解题思路：
+# 题目要求将和作为新的Linked List返回，故而将需要一个新的head, 每计算一位，就新建一个新的node.
+# 需要注意的是两个整数不一定有同样的位数，也就是说会出现一个list 已经结束，但是另一个还在中间。以及最后要检查是否有进位。
+# 技巧就是要重复使用carry变量， 分别将两个数加至carry 上，若List已经到头，则无需加。

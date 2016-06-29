@@ -37,3 +37,8 @@ mylist.showList(Solution().deleteDuplicates(nodes))
 nodes = mylist.createList([1, 3])
 mylist.showList(nodes)
 mylist.showList(Solution().deleteDuplicates(nodes))
+
+# 解题思路：
+# 慢指针停在我们要保留的节点上，
+# 然后通过比较慢指针的下一个节点以及 随后的节点，知道找到不相同的
+# 注意点，就是没有重复节点的判定，也就是慢指针的随后两个节点都不一样

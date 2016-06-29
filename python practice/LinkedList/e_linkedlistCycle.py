@@ -20,3 +20,7 @@ class Solution(object):
             if slow == fast:
                 return True
         return False
+
+# 解题思路
+# 快指针与慢指针
+# 两者相遇，则说明有cycle

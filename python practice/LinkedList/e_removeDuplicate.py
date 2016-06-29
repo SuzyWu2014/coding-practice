@@ -30,3 +30,8 @@ mylist.showList(Solution().deleteDuplicates(nodes))
 nodes = mylist.createList([1, 3])
 mylist.showList(nodes)
 mylist.showList(Solution().deleteDuplicates(nodes))
+
+# 解题思路：
+# 要删除sorted list里的重复值，只需要对比相邻的节点，
+# curr 指针就留在当前会保留的最后的一个元素上
+# 要删除的永远是curr指针的下一个元素，故而需要前置指针的信息
