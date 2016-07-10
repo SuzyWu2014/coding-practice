@@ -9,6 +9,7 @@
 
 # Return:
 # ["AAAAACCCCC", "CCCCCAAAAA"].
+import collections
 
 
 class Solution(object):
@@ -17,3 +18,10 @@ class Solution(object):
         :type s: str
         :rtype: List[str]
         """
+        seq_dict = collections.defaultdict(int)
+        for i in range(len(s) - 9):
+            key = s[i: i + 10]
+            seq_dict[key] += 1
+        return [sub_str for sub_str, count in seq_dict.iteritems() if count > 1]
+
+print Solution().findRepeatedDnaSequences("AAAAACCCCCAAAAACCCCCCAAAAAGGGTTT")
