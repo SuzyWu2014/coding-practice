@@ -25,3 +25,10 @@ class Solution(object):
         return [sub_str for sub_str, count in seq_dict.iteritems() if count > 1]
 
 print Solution().findRepeatedDnaSequences("AAAAACCCCCAAAAACCCCCCAAAAAGGGTTT")
+
+
+# 解题思路
+"""
+求 重复的substring:
+dict: key - substring, value - count
+"""

@@ -39,3 +39,10 @@ class Solution(object):
                         if k[0] > j:
                             rst.add((nums[i], nums[j], nums[k[0]], nums[k[1]]))
         return [list(i) for i in rst]
+
+# 解题思路：
+"""
+四个数和为0，先排序：
+1， 求两个数的和的所有结果存在dict里，key为和，value为两个数的位置
+2， 重新计算任意两个数之和，并check 对应的和的负数是否已经在dict中
+"""

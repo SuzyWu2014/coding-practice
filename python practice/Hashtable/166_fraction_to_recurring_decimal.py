@@ -49,3 +49,9 @@ class Solution(object):
 print Solution().fractionToDecimal(1, 6)
 print Solution().fractionToDecimal(1, 3)
 print Solution().fractionToDecimal(4, 3)
+
+# 解题思路
+"""
+使用原始的求余数的方法
+hash部分：dict 存余数，及相应的小数位置
+"""
