@@ -20,4 +20,13 @@ class Solution(object):
         :type prices: List[int]
         :rtype: int
         """
-        
+        if len(prices) < 2:
+            return 0
+        max_profit = 0
+        pre_min_stock = prices[0]
+        for i in range(1, len(prices)):
+            if prices[i] - pre_min_stock > max_profit:
+                max_profit = prices[i] - pre_min_stock
+            if prices[i] < pre_min_stock:
+                pre_min_stock = prices[i]
+        return max_profit
