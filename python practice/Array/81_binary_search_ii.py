@@ -19,13 +19,24 @@ class Solution(object):
             mid = (low + high) / 2
             if nums[mid] == target:
                 return True
-            elif nums[mid] >= nums[high]:
-                low = mid - 1
+            if nums[low] == nums[mid]:
+                low += 1
+            elif nums[high] == nums[mid]:
+                high -= 1
+            elif nums[low] <= nums[mid]:
+                if nums[low] <= target < nums[mid]:
+                    high = mid - 1
+                else:
+                    low = mid + 1
             else:
-                high = mid + 1
+                if nums[mid] <= target < nums[low]:
+                    low = mid + 1
+                else:
+                    high = mid - 1
         return False
 
-# print Solution().search([1], 2)
-# print Solution().search([2, 1], 2)
-# print Solution().search([2, 1], 1)
+print Solution().search([1], 2)
+print Solution().search([2, 1], 2)
+print Solution().search([2, 1], 1)
 print Solution().search([1, 3], 3)
+print Solution().search([1, 3, 5], 1)
