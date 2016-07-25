@@ -32,6 +32,7 @@ class Solution(object):
         return heapq.heappop(heap)
 
     def findKthLargest3(self, nums, k):
+        # O(n)
         pivot = random.choice(nums)
         smallers, largers = [], []
         for num in nums:
