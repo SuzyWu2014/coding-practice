@@ -8,6 +8,7 @@
 # Note:
 # You may assume k is always valid, 1 ≤ k ≤ array's length.120_triangle.py
 import heapq
+import random
 
 
 class Solution(object):
@@ -30,6 +31,23 @@ class Solution(object):
             print heap, heap[0], heap[len(heap) - 1]
         return heapq.heappop(heap)
 
-print Solution().findKthLargest2([3, 2, 1, 5, 6, 7, 4], 4)
+    def findKthLargest3(self, nums, k):
+        pivot = random.choice(nums)
+        smallers, largers = [], []
+        for num in nums:
+            if num < pivot:
+                smallers.append(num)
+            if num > pivot:
+                largers.append(num)
+        if k <= len(largers):
+            return self.findKthLargest3(largers, k)
+        elif k > len(nums) - len(smallers):
+            return self.findKthLargest3(smallers, k - (len(nums) - len(smallers)))
+        else:
+            return pivot
+
+
+print Solution().findKthLargest3([-1, 2, 0], 2)
+# print Solution().findKthLargest3([3, 2, 1, 5, 6, 4], 2)
 # print Solution().findKthLargest2([2, 1], 2)
 # print Solution().findKthLargest2([2, 1], 1)
