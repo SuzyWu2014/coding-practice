@@ -17,4 +17,23 @@ class Solution(object):
         :type path: str
         :rtype: str
         """
-        pass
+        stack = []
+        sub_paths = path.split('/')
+        for path in sub_paths:
+            if path == '.' or path == '':
+                pass
+            elif path == '..':
+                if len(stack) > 0:
+                    stack.pop()
+            else:
+                stack.append(path)
+        if stack == []:
+            return '/'
+        else:
+            path = ''
+            for item in stack:
+                path += "/" + item
+            return path
+
+print Solution().simplifyPath("/a/./b/../../c/")
+print Solution().simplifyPath("/../")
