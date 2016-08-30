@@ -21,6 +21,3 @@ class Solution(object):
             rst.append(num_str)
             i += 1
         return rst
-
-
-    
