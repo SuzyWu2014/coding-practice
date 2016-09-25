@@ -1,0 +1,9 @@
+Questions:
+
+0. Q: What's the best-case, worst-case, and average-case time complexities of quicksort.
+   Briefly explain each case.
+
+   best-case: nlog n
+   worst-case: n^2
+   average-case: nlog n
+
