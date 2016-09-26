@@ -31,6 +31,7 @@ def sorted(t):
     left, root, right = t
     return sorted(left) + [root] + sorted(right)
 
+
 def search(t, x):
     """
     Returns whether x is in t
@@ -45,8 +46,7 @@ def insert(t, x):
     inserts x into t (in-place) if it is missing, otherwise does nothing.
     """
     if t is None:
-        t = [[], x, []]
-        pass
+        return
     subtree = _search(t, x)
     if subtree == []:
         subtree.extend([[], x, []])
@@ -66,7 +66,7 @@ def _search(t, x):
 
 
 # Solution 1: without helper function
-def search_1(t, x):
+def search_sol1(t, x):
     """
     Returns whether x is in t
     """
@@ -80,7 +80,7 @@ def insert_sol1(t, x):
     """
     inserts x into t if it is missing, otherwise does nothing. => not in-place
     """
-    if not t:
+    if t is None or t == []:
         return [[], x, []]
     left, root, right = t
     if x < root:

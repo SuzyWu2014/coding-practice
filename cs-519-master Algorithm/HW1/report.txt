@@ -1,9 +1,81 @@
 Questions:
 
+Quicksort
+-------------------------------------------------------------------------------
 0. Q: What's the best-case, worst-case, and average-case time complexities of quicksort.
    Briefly explain each case.
 
-   best-case: nlog n
-   worst-case: n^2
-   average-case: nlog n
+   The time taken by the quicksort to sort n elements is:
+        T(n) = O(n) + T(n - x) + T(x) + C
+   where O(n) refers to the time taken to partition the list; C refers to some constant time spent on the trivial operations.
 
+   best-case: nlog n
+   => This occurs when pivot partitions the list equally, namely when x = n/2, the recursion depth of the T(n) is log n, T(n) = time_for_partition * depth_of_recussion = O(n) + 2O(n/2) + 4O(n/4) +...+ (2^log n)O(1) = O(n) * O(log n) + nT(1) = O(nlog n)
+
+   worst-case: n^2
+   => This occurs when x = 1, that is, when the pivot is the smallest or largest in the list. Therefore, then T(n) = O(n) + O(n - 1) + ... + O(1) = O( n(n + 1) / 2) = O(n^2)
+
+   average-case: nlog n
+   => Since we don't always get evenly balanced partition, suppose we always get at worst a 3-to-1 split(3/4 on one side, and 1/4 on another). Namely, x is n/4 or 3n/4. Then the recursion depth is log(4/3, n), Therefore, T(n) = O(n) * O(log(4/3, n)) = O(n * log n) / (log 4/3) = O(n * log n)
+
+Quickselect
+-------------------------------------------------------------------------------
+1.  Q: What's the best-case, worst-case, and average-case time complexities? Briefly explain.
+
+We have:
+    T(n) = O(n) + T(n - x) + C
+where O(n) refers to the time taken to partition the list; C refers to some constant time spent on the trivial operations.
+
+best-case: O(n)
+=> This occurs when the first pivot is the kth smallest element, so the recursion depth is 1, T(n) = O(n)
+
+worse-case: O(n^2)
+=> This occurs then x=1, then T(n) = O(n) + O(n - 1) + ... + O(1) + C = O( n(n + 1) / 2) + C = O(n^2)
+
+average-case: O(n)
+=> In quickselect, we apply recussion on only one part of the partition, take x = n/2, then the recursion depth is log n. T(n) = O(n) + O(n/2) + O(n/4) + ... + O(1) = 2O(n) = O(n). Similarily when x is other cases.
+
+Binary Tree
+-------------------------------------------------------------------------------
+2. Q: What are the time complexities for the operations implemented?
+
+sorted(): T(n) = O(1) + T(n - x) + T(x) + C
+ => best-case: O(n)
+ --> T(n) = O(1) + 2T(n/2) + C = O(1) * ( 1 + 2 + 4 +... + 2^log n)
+          = O(n)
+ => worst-case: O(n)
+ --> T(n) = O(1) + T(n - 1) + T(1) + C = O(1) * n = O(n)
+ => average-case: O(n)
+
+_search()
+ => best-case: O(1) => root is x
+ => worst-case: O(n) => there is only one path in the tree (from root to leaf)
+ => average-case: O(log n)
+
+search() => same as above
+ => best-case: O(1)
+ => worst-case: O(n)
+ => average-case: O(log n)
+
+insert()
+ => best-case: O(1) => root is x
+ => worst-case: O(n) => there is only one path in the tree (from root to leaf)
+ => average-case: O(log n)
+
+
+Debriefing (required!):
+-------------------------------------------------------------------------------
+1. Approximately how many hours did you spend on this assignment?
+5 hours
+
+2. Would you rate it as easy, moderate, or difficult?
+Easy.
+
+3. Did you work on it mostly alone, or mostly with other people?
+mostly alone, but discussed with others after finishing it.
+
+4. How deeply do you feel you understand the material it covers (0%–100%)?
+I would say 80%. I spent some time on explaining complexities. I believed I understood it, but it's not quite right when you ask more WHYs. For instance, if you ask me to analyze average-case complexity mathematically.
+
+5. Any other comments?
+1) Can we do reports in other format? such as pdf/doc/md
