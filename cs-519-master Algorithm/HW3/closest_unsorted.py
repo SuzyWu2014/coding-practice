@@ -9,6 +9,38 @@ def find(nums, val, k):
         return
     diff = map(lambda x: abs(x - val), nums)
     kth_diff = quickselect(diff, k)
+    less_kth = [i for i, num in enumerate(nums) if abs(num - val) < kth_diff ]
+    equal_kth = [i for i, num in enumerate(nums) if abs(num - val) == kth_diff ]
+    closest_k = merge(less_kth, equal_kth[:(k - len(less_kth))])
+    return [nums[index] for index in closest_k]
+
+def merge(left, right):
+    rst = []
+    i, j = 0, 0
+    while i < len(left) or j < len(right):
+        if i == len(left):
+            rst += right[j:]
+            break
+        elif j == len(right):
+            rst += left[i:]
+            break
+        elif left[i] < right[j]:
+            rst.append(left[i])
+            i += 1
+        else:
+            rst.append(right[j])
+            j += 1
+    return rst
+
+
+def find2(nums, val, k):
+    """
+    find the k numbers in nums that are closest (in value) to x.
+    """
+    if nums is None or k < 0 or len(nums) < k:
+        return
+    diff = map(lambda x: abs(x - val), nums)
+    kth_diff = quickselect(diff, k)
     closest_k = [num for num in nums if abs(num - val) <= kth_diff]
     if len(closest_k) > k:
         count = len(closest_k) - k
@@ -33,7 +65,3 @@ def quickselect(nums, k):
         return quickselect(right, k - (len(nums) - len(right)))
     else:
         return pivot
-
-
-print find([4,1,3,2,7,4], 5.2, 2)
-print find([4,4,4,4,1,3,2,7,4], 6.5, 3)

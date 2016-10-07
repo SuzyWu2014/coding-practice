@@ -12,7 +12,9 @@ def find(nums):
 
 
 def findSum(nums, target, rst):
-    "find x + y = nums[target]"
+    """
+    find x + y = nums[target]
+    """
     i = 1 if target == 0 else 0
     j = len(nums) - 2 if target == len(nums) - 1 else len(nums) - 1
     while i < j:
@@ -24,6 +26,3 @@ def findSum(nums, target, rst):
             rst.append((nums[i], nums[j], nums[target]))
             i += 1
             j -= 1
-
-
-print find([1, 4, 2, 3, 5])

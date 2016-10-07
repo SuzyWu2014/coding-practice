@@ -10,17 +10,16 @@ def find(nums, val, k):
     right = bisect.bisect_left(nums, val)
     left = right - 1
     while right - left - 1 < k:
-        if right == len(nums) or abs(nums[left] - val) <= abs(nums[right] - val):
+        if right == len(nums) or (left >= 0 and abs(nums[left] - val) <= abs(nums[right] - val)):
             left -= 1
         else:
             right += 1
     return nums[left + 1:right]
 
 
-print find([1,2,3,4,4,7], 5.2, 2)
-print find([1,2,3,4,4,7], 6.5, 3)
-print find([1,2,3,4,4,6,6], 5, 3)
-print find([1,2,3,4,4,5,6], 4, 5)
-print find([1,1,2,3,4,4,5,6], 1, 5)
-
-
+if __name__ == "__main__":
+    print find([1, 1, 1, 1, 1], 1, 0)
+    print find([1, 1, 1, 1, 1], 1, 5)
+    print find([1, 1, 1, 10, 10, 10], 5, 1)
+    print find([1, 1, 1, 10, 10, 10], 3, 4)
+    print find([1, 1, 1, 10, 10, 10, 10], 10, 4)
