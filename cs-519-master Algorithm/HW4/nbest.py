@@ -2,6 +2,10 @@ from operator import itemgetter
 import itertools
 import random
 
+def sort(pairs):
+    return sorted(sorted(pairs, key=itemgetter(1)), key=lambda x: x[0] + x[1])
+
+
 def nbesta(a, b):
     """
     Given two lists A and B, each with n integers, return
@@ -10,33 +14,35 @@ def nbesta(a, b):
     n^2 log n^2
     """
     pairs = [i for i in itertools.product(a, b)]
-    pairs = sorted(pairs, key=itemgetter(1))
-    pairs = sorted(pairs, key=lambda x: x[0] + x[1])
+    pairs = sort(pairs)
     return pairs[:len(a)]
 
 
 def nbestb(a, b):
     """
-    n * n^2
+    n^2
     """
     pairs = [i for i in itertools.product(a, b)]
-    nth_x, nth_y = quickselect(pairs, len(a) + 1)
-    return filter(lambda x: x[0] + x[1] < nth_x + nth_y or (x[0] + x[1] == nth_x + nth_y and x[1] < nth_y), pairs)
+    nth_pair = quickselect(pairs, len(a) + 1)
+    n_pairs = filter(lambda x: sum(x) < sum(nth_pair) or ( sum(x) == sum(nth_pair) and x[1] < nth_pair[1]), pairs)
+    return sort(n_pairs)
+
 
 def quickselect(pairs, k):
     if k <= 0 or pairs is None or k > len(pairs):
         return
     pair = random.choice(pairs)
-    left = filter(lambda x: x[0] + x[1] < pair[0] + pair[1] or
-                   (x[0] + x[1] == pair[0] + pair[1] and x[1] < pair[1]), pairs)
-    right = filter(lambda x: x[0] + x[1] > pair[0] + pair[1] or
-                   (x[0] + x[1] == pair[0] + pair[1] and x[1] > pair[1]), pairs)
+    left = filter(lambda x: sum(x) < sum(pair) or (sum(x) == sum(pair) and x[1] < pair[1]), pairs)
+    right = filter(lambda x: sum(x) > sum(pair) or (sum(x) == sum(pair) and x[1] > pair[1]), pairs)
     if k <= len(left):
         return quickselect(left, k)
     elif k > len(pairs) - len(right):
         return quickselect(right, k - (len(pairs) - len(right)))
     else:
         return pair
+
+def nbestc(a, b):
+    pass
 
 a, b = [4, 1, 5, 3], [2, 6, 3, 4]
 print nbesta(a, b)
