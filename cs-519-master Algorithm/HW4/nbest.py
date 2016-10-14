@@ -61,7 +61,7 @@ def nbestc(a, b):
     while 1:
         tmp_sum, y = sum(heap[0]),heap[0][1]
         if a[i] + a[j + 1] < a[i + 1] + a[j]:
-            rst.append
+            pass
     print rst
 
 
