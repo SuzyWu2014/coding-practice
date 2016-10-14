@@ -1,6 +1,7 @@
 from operator import itemgetter
 import itertools
 import random
+import heapq
 
 def sort(pairs):
     return sorted(sorted(pairs, key=itemgetter(1)), key=lambda x: x[0] + x[1])
@@ -22,6 +23,7 @@ def nbesta(a, b):
 
 def nbestb(a, b):
     """
+    enumerate all n^2 pairs, but use qselect from hw1.
     n^2
     """
     if a is None or b is None or len(a) != len(b):
@@ -47,11 +49,24 @@ def quickselect(pairs, k):
         return pair
 
 def nbestc(a, b):
+    """
+    Dijkstra-style best-first, only enumerate O(n) (at most 2n) pairs.
+    """
     if a is None or b is None or len(a) != len(b):
         return
-    pass
+    a, b = sorted(a), sorted(b)
+    heap = [(a[0],b[0])]
+    i, j = 0, 0
+    curr_sum = a[0] + b[0]
+    while 1:
+        tmp_sum, y = sum(heap[0]),heap[0][1]
+        if a[i] + a[j + 1] < a[i + 1] + a[j]:
+            rst.append
+    print rst
+
 
 a, b = [4, 1, 5, 3], [2, 6, 3, 4]
 # a, b = [1, 1, 1, 1], [1, 1, 1, 1]
 print nbesta(a, b)
 print nbestb(a, b)
+print nbestc(a, b)
