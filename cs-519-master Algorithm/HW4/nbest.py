@@ -16,8 +16,7 @@ def nbesta(a, b):
     """
     if a is None or b is None or len(a) != len(b):
         return
-    pairs = [i for i in itertools.product(a, b)]
-    pairs = sort(pairs)
+    pairs = sort(itertools.product(a, b))
     return pairs[:len(a)]
 
 
@@ -55,18 +54,23 @@ def nbestc(a, b):
     if a is None or b is None or len(a) != len(b):
         return
     a, b = sorted(a), sorted(b)
-    heap = [(a[0],b[0])]
-    i, j = 0, 0
-    curr_sum = a[0] + b[0]
-    while 1:
-        tmp_sum, y = sum(heap[0]),heap[0][1]
-        if a[i] + a[j + 1] < a[i + 1] + a[j]:
-            pass
-    print rst
+    rst = []
+    heap = [(a[0] + b[0], 0, 0)]
+    item_set = set([(0, 0)])
+    while len(rst) < len(a):
+        _, j, i = heapq.heappop(heap)
+        rst.append((a[i], b[j]))
+        if i + 1 < len(a) and (i + 1, j) not in item_set:
+            item_set.add((i + 1, j))
+            heapq.heappush(heap, (a[i + 1] + b[j], j, i + 1))
+        if j + 1 < len(b) and (i, j + 1) not in item_set:
+            item_set.add((i, j + 1))
+            heapq.heappush(heap, (a[i] + b[j + 1], j + 1, i))
 
+    return rst
 
 a, b = [4, 1, 5, 3], [2, 6, 3, 4]
-# a, b = [1, 1, 1, 1], [1, 1, 1, 1]
-print nbesta(a, b)
-print nbestb(a, b)
+a, b = [1, 1, 1, 1], [1, 1, 1, 1]
+print(nbesta(a, b))
+print(nbestb(a, b))
 print nbestc(a, b)

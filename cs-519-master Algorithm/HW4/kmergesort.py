@@ -13,7 +13,7 @@ def kmergesort(nums, k):
 
 
 def merge(nums_list):
-    return [i for i in heapq.merge(*nums_list)]
+    return list(heapq.merge(*nums_list))
 
 def merge2(nums_list):
     heap = [(nums[0], list_idx, 0 ) for list_idx, nums in enumerate(nums_list) if len(nums) > 0]
@@ -27,3 +27,4 @@ def merge2(nums_list):
     return rst
 
 print kmergesort([4,1,5,2,6,3,7,0], 3)
+print kmergesort([4,13,7,0], 8)
