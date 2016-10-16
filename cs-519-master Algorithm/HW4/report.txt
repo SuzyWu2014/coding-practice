@@ -11,6 +11,21 @@
 
    (b) (empirically)   Use a long list of random numbers to show the difference in time. What about sorted or reversely-sorted numbers?
 
+with heappush         with heapify
+-------------------------------------------------------
+random lists of size 10000, 100000, 1000000:
+-------------------------------------------------------
+0.0102829933167       0.00698590278625
+0.0933690071106       0.0553829669952
+0.903342962265        0.548058986664
+-------------------------------------------------------
+reversely-sorted lists of size 10000, 100000, 1000000:
+-------------------------------------------------------
+0.0514249801636       0.00743389129639
+0.519330024719        0.053601026535
+6.4016392231          0.596711874008
+
+As shown above, with heapify operation, the time spent on building the heap grew linearly. Namely, the time complexity is linear. On the other hand, with heappush operation, it's slower than utilizing heapify operation to build the heap.
 
 1.    Q: What are the time complexities of these algorithms?
 nbesta => O(n^2 log n^2) for sorting a list of n^2 elements
@@ -33,6 +48,8 @@ We have:
 => n log k
 
 => It takes O(n) to traverse the list, and it takes O(log k) to insert/pop elements to/from a heap of size k.
+=> O(k log k) to sort the final list
+=> since k << n
 => Therefore, T(n) = O(n log k)
 
 Debriefing (required!): --------------------------
@@ -55,4 +72,4 @@ Debriefing (required!): --------------------------
     Solve the problems.
 
 6. Which part(s) of the course you dislike the most so far?
-    Sometime it's hard to see what you wrote in the board. Maybe use the projector when analyse the complexity?
+    I would say don't try to squeeze the quiz questions into one page, it would be a lot nicer if you print it double-sided.

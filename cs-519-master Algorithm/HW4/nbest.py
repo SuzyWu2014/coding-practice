@@ -69,8 +69,10 @@ def nbestc(a, b):
 
     return rst
 
-a, b = [4, 1, 5, 3], [2, 6, 3, 4]
-a, b = [1, 1, 1, 1], [1, 1, 1, 1]
-print(nbesta(a, b))
-print(nbestb(a, b))
-print nbestc(a, b)
+
+if __name__ == "__main__":
+    a, b = [4, 1, 5, 3], [2, 6, 3, 4]
+    # a, b = [1, 1, 1, 1], [1, 1, 1, 1]
+    print(nbesta(a, b))
+    print(nbestb(a, b))
+    print(nbestc(a, b))

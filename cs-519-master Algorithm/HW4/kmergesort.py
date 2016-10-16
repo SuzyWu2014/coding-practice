@@ -26,5 +26,7 @@ def merge2(nums_list):
             heapq.heappush(heap, (nums_list[list_idx][item_idx + 1], list_idx, item_idx + 1))
     return rst
 
-print kmergesort([4,1,5,2,6,3,7,0], 3)
-print kmergesort([4,13,7,0], 8)
+
+if __name__ == "__main__":
+    print kmergesort([4,1,5,2,6,3,7,0], 3)
+    print kmergesort([4,13,7,0], 8)
