@@ -13,7 +13,8 @@ def ksmallest(k, nums):
         if len(heap) < k:
             heapq.heappush(heap, -num)
         elif -heap[0] > num:
-            heapq.heappushpop(heap, -num)
+            # heapq.heappushpop(heap, -num)
+            heapq.heapreplace(heapq, -num)
     return sorted([-i for i in heap])
     # return sorted([-heapq.heappop(heap) for i in xrange(k)])
 
