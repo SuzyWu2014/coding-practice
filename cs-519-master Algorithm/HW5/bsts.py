@@ -11,9 +11,7 @@ def bsts(num):
     if num <= 2:
         return num
     dp = [0] * (num + 1)
-    dp[0] = 1
-    dp[1] = 1
-    dp[2] = 2
+    dp[0], dp[1], dp[2] = 1, 1, 2
     for k in xrange(3, num + 1):
         count = 0
         for i in xrange(k):
