@@ -21,6 +21,8 @@ def bsts(num):
 
 
 if __name__ == '__main__':
+    print(bsts(1))
+    print(bsts(2))
     print(bsts(3))
     print(bsts(4))
     print(bsts(5))

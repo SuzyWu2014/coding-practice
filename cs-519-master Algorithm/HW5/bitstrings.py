@@ -23,3 +23,5 @@ if __name__ == '__main__':
     print(num_yes(4))
     print(num_no(3))
     print(num_no(4))
+    print(num_no(10))
+    print(num_yes(10))

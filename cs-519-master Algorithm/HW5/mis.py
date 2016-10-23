@@ -16,27 +16,14 @@ def max_wis2(nums):
     if len(nums) >= 2:
         dp.append(max((nums[1], [nums[1]]), dp[0]))
     for i in xrange(2, len(nums)):
-        dp.append(max((nums[i], [nums[i]]),
-                        (nums[i] + dp[i - 2][0], dp[i - 2][1] + [nums[i]]),
+        dp.append(max((nums[i] + dp[i - 2][0], dp[i - 2][1] + [nums[i]]),
                         dp[i - 1]))
     return dp[len(nums) - 1]
 
 
-def memorize(func):
-    d = dict()
-
-    def wrapper(*args):
-        if args in d:
-            return d[args]
-        else:
-            result = func(*args)
-            d[args] = result
-            return result
-    return wrapper
-
 def _max_wis(size, nums, item_dict=None):
     """
-    item_dict[curr_item] = (max_sum, pre_item, with_current_item )
+    item_dict[curr_item] = (max_sum, pre_item_index, if_current_item_in_the_set )
     """
     if item_dict is None or len(item_dict) == 0:
         item_dict = dict()
@@ -60,25 +47,24 @@ def max_wis(nums):
         _, pre, if_curr = item_dict[curr]
         if if_curr:
             items.append(nums[curr])
-        if pre == -1:
+        if pre < 0:
             break
         curr = pre
     return (max_sum, list(reversed(items)))
 
 if __name__ == '__main__':
     print(max_wis([]))
+    print(max_wis2([]))
     print(max_wis([-1]))
+    print(max_wis2([-1]))
     print(max_wis([1,2]))
+    print(max_wis2([1,2]))
     print(max_wis([1,-2]))
-
-    # print(max_wis2([]))
-    # print(max_wis2([-1]))
-    # print(max_wis2([1,2]))
-    # print(max_wis2([1,-2]))
+    print(max_wis2([1,-2]))
 
     print(max_wis2([7,8,5]))
     print(max_wis([7,8,5]))
     print(max_wis2([-1,8,10]))
     print(max_wis([-1,8,10]))
-    print(max_wis2([1,8,2,10,6, -3, -4, -5, 10]))
-    print(max_wis([1,8,2,10,6, -3, -4, -5, 10]))
+    print(max_wis2([1,8,8,2,10,6, -3, -4, -5, 10]))
+    print(max_wis([1,8,8,2,10,6, -3, -4, -5, 10]))
