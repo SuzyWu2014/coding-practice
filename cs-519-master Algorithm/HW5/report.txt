@@ -1,9 +1,18 @@
 0. Compare two recursive implementations of fib (naive vs. memoized).
    (a) What's exact complexity of naive in theory?
-T(n) = T(n - 1) + T(n - 2)
+T(n) = T(n - 1) + T(n - 2) = O(2 ^ n); This is the upper bound, the exact complexity is approximately 1.6 ^ n.
 
    (b) Let's say you know it's O(a^n); can you curve-fit to determine the approximate value of a?
+   Suppose we have: T(n) = O(a^n) + c
+   Then we have:    log(T(n)) = n log a + c
+        For function f(n) = kn +b ==> f(n): log(T(n))
+    By utilizing gnuplot:
+        k = 0.43079
+        b = - 14.752
+    we have log a == k, Therefore a = 1.53
+
    (c) Does this value match the theoretical complexity?
+        Almost.
 
 1. What's the complexity?
 Top-down version: - Memorizing the current sum, position of previous item
