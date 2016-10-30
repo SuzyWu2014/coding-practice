@@ -1,0 +1,24 @@
+0. For each of the coding problems below:
+   (a) Describe an exhaustive solution, and analyze compleixty (might be exponential).
+   (b) Describe a greedy solution, and analyze complexity.
+   (c) Show a counterexample to the greedy solution.
+   (d) Theoretically, is the top-down solution faster, or the bottom-one one faster?
+   (e) Empirically, which one is faster? (Try some long random lists)
+
+1-Q: What are the time and space complexities?
+
+
+
+2-Q: What are the time and space complexities?
+3-Q: What are the time and space complexities?
+
+
+Debriefing (required!): --------------------------
+
+0. What's your name?
+1. Approximately how many hours did you spend on this assignment?
+2. Would you rate it as easy, moderate, or difficult?
+3. Did you work on it mostly alone, or mostly with other people?
+4. How deeply do you feel you understand the material it covers (0%–100%)? 
+5. Which part(s) of the course you like the most so far?
+6. Which part(s) of the course you dislike the most so far?

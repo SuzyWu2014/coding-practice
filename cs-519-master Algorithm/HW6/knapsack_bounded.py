@@ -1,6 +1,9 @@
 import collections
 
+
 def best(weight, items):
+    if weight is None or items is None:
+        return
     d = collections.defaultdict(dict)
 
     def _best(weight, item_index, d):
@@ -21,6 +24,7 @@ def best(weight, items):
     max_val, item, cp = _best(weight, len(items), d)
     return (max_val, back_trace(weight, items, d))
 
+
 def best2(weight, items):
     """
     Bounded Knapsack
@@ -30,6 +34,10 @@ def best2(weight, items):
     What's the best value for a bag of W?
     (0, -1, -1): max_val, index of curr item, # of curr item
     """
+    if weight is None or items is None:
+        return
+    if weight <= 0:
+        return (0, [0] * len(items))
     d = [[0] * (len(items) + 1) for i in xrange(weight + 1)]
     for i in xrange(weight + 1):
         d[i][0] = (0, 0, 0)
@@ -49,7 +57,7 @@ def best2(weight, items):
 def back_trace(weight, items, d):
     rst = [0] * len(items)
     curr = len(items)
-    while weight >= 0 and curr > 0:
+    while weight > 0 and curr > 0:
         _, curr, cnt = d[weight][curr]
         rst[curr - 1] = cnt
         weight -= items[curr - 1][0] * cnt
@@ -57,9 +65,16 @@ def back_trace(weight, items, d):
     return rst
 
 
-
-print best(3, [(2, 4, 2), (3, 5, 3)])
-print best(3, [(1, 5, 2), (1, 5, 3)])
-print(best(3, [(1, 5, 1), (1, 5, 3)]))
-print(best(20, [(1, 10, 6), (3, 15, 4), (2, 10, 3)]))
-print(best(92, [(1, 6, 6), (6, 15, 7), (8, 9, 8), (2, 4, 7), (2, 20, 2)]))
+if __name__ == '__main__':
+    print(best(0, [(2, 4, 2), (3, 5, 3)]))
+    print(best(-20, [(2, 4, 2), (3, 5, 3)]))
+    print(best(2, [(2, 4, 2), (3, 5, 3)]))
+    print(best(1, [(2, 4, 2), (3, 5, 3)]))
+    print(best(5, []))
+    print(best(5, None))
+    print(best(5, [(2, 4, 2), (3, 5, 3)]))
+    print(best(3, [(2, 4, 2), (3, 5, 3)]))
+    print(best(3, [(1, 5, 2), (1, 5, 3)]))
+    print(best(3, [(1, 5, 1), (1, 5, 3)]))
+    print(best(20, [(1, 10, 6), (3, 15, 4), (2, 10, 3)]))
+    print(best(92, [(1, 6, 6), (6, 15, 7), (8, 9, 8), (2, 4, 7), (2, 20, 2)]))
