@@ -1,4 +1,27 @@
+import collections
+
 def best(weight, items):
+    d = collections.defaultdict(dict)
+
+    def _best(weight, item_index, d):
+        if weight <= 0:
+            d[0][item_index] = (0, item_index, 0)
+            return d[0][item_index]
+        if item_index == 0:
+            d[weight][0] = (0, 0, 0)
+            return d[weight][0]
+        if weight in d and item_index in d[weight]:
+            return d[weight][item_index]
+        wi, vi, ci = items[item_index - 1]
+        vals = [(_best(weight - wi * k, item_index - 1, d)[0] + vi * k, item_index, k) for k in xrange(1, ci + 1) if weight >= wi * k]
+        tmp = max(vals, key=lambda x: (x[0], -x[1])) if len(vals) > 0 else (0, item_index, 0)
+        d[weight][item_index] = max(_best(weight, item_index - 1, d), tmp, key=lambda x: (x[0], -x[1]))
+        return d[weight][item_index]
+
+    max_val, item, cp = _best(weight, len(items), d)
+    return (max_val, back_trace(weight, items, d))
+
+def best2(weight, items):
     """
     Bounded Knapsack
 
