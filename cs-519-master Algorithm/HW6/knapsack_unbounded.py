@@ -7,9 +7,8 @@ def best(weight, items):
     What's the best value for a bag of W?
     """
     d = [(0, -1) for i in xrange(weight + 1)]
-
     for w in xrange(1, weight + 1):
-        vals = [(d[w - item[0]][0] + item[1], i) for i, item in enumerate(items) if w >= item[0]]
+        vals = [(d[w - wi][0] + vi, i) for i, (wi, vi) in enumerate(items) if w >= wi]
         d[w] = max(vals, key=lambda x: (x[0], -x[1])) if len(vals) > 0 else (0, -1)
 
     count = back_trace(weight, items, d)
@@ -25,13 +24,36 @@ def back_trace(weight, items, d):
     return count
 
 
-# def best2(weight, items):
-# pass
+def best2(weight, items):
+    d = dict()
+
+    def _best(weight, d):
+        if weight <= 0:
+            d[0] = (0, -1)
+            return d[0]
+        if weight in d:
+            return d[weight]
+
+        vals = [(_best(weight - wi, d)[0] + vi, i) for i, (wi, vi) in enumerate(items) if weight >= wi ]
+        d[weight] = max(vals, key=lambda x: (x[0], -x[1])) if len(vals) > 0 else (0, -1)
+        return d[weight]
+
+    max_val, _ = _best(weight, d)
+    count = back_trace(weight, items, d)
+    return (max_val, count)
 
 
-print best(3, [(2, 4), (3, 5)])
-print best(3, [(1, 5), (1, 5)])
-print best(3, [(1, 2), (1, 5)])
-print best(3, [(1, 2), (2, 5)])
-print best(58, [(5, 9), (9, 18), (6, 12)])
-print best(92, [(8, 9), (9, 10), (10, 12), (5, 6)])
+if __name__ == '__main__':
+    print best(3, [(2, 4), (3, 5)])
+    print best(3, [(1, 5), (1, 5)])
+    print best(3, [(1, 2), (1, 5)])
+    print best(3, [(1, 2), (2, 5)])
+    print best(58, [(5, 9), (9, 18), (6, 12)])
+    print best(92, [(8, 9), (9, 10), (10, 12), (5, 6)])
+
+    print best2(3, [(2, 4), (3, 5)])
+    print best2(3, [(1, 5), (1, 5)])
+    print best2(3, [(1, 2), (1, 5)])
+    print best2(3, [(1, 2), (2, 5)])
+    print best2(58, [(5, 9), (9, 18), (6, 12)])
+    print best2(92, [(8, 9), (9, 10), (10, 12), (5, 6)])
