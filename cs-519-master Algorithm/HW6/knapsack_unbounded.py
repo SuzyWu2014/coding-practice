@@ -5,6 +5,7 @@ def best(weight, items):
     You have n items, each with weight w_i and value v_i, and has infinite copies.
     **All numbers are positive integers.**
     What's the best value for a bag of W?
+    (0, -1) => max_val, index of current item
     """
     d = [(0, -1) for i in xrange(weight + 1)]
     for w in xrange(1, weight + 1):
