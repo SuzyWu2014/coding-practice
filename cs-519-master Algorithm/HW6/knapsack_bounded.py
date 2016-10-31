@@ -3,7 +3,7 @@ import time
 import random
 
 
-def best(weight, items):
+def best2(weight, items):
     if weight is None or items is None:
         return
     d = collections.defaultdict(dict)
@@ -27,7 +27,7 @@ def best(weight, items):
     return (max_val, back_trace(weight, items, d))
 
 
-def best2(weight, items):
+def best(weight, items):
     """
     Bounded Knapsack
 
@@ -69,6 +69,7 @@ def back_trace(weight, items, d):
 
 if __name__ == '__main__':
     items = []
+    random.seed(10)
     for i in xrange(500):
         items.append((random.randint(0, 20),random.randint(0, 20),random.randint(0, 10) ))
     time1 = time.time()

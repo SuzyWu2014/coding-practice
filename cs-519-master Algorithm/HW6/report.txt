@@ -41,6 +41,7 @@ Bottom-up
 For bounded knapsack, I tested with 500 items and a bag of weight 320:
 Bottom-up: 1.24515414238
 top-down: 3.2512409687
+And for top-down, it's 
 
 1-Q: What are the time and space complexities?
 Let W be the weight，n be the number of items
