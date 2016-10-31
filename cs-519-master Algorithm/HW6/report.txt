@@ -37,11 +37,11 @@ lis: It's hard to think about a wrong algorithm on purpose!
 Top-down is faster. The number of  computation needed is less than bottom-up.
 
    (e) Empirically, which one is faster? (Try some long random lists)
-Bottom-up
+Bottom-up is faster.
 For bounded knapsack, I tested with 500 items and a bag of weight 320:
 Bottom-up: 1.24515414238
 top-down: 3.2512409687
-And for top-down, it's 
+And for top-down, it's easily to get "RuntimeError: maximum recursion depth exceeded while calling a Python object".
 
 1-Q: What are the time and space complexities?
 Let W be the weight，n be the number of items
