@@ -1,24 +1,75 @@
 0. For each of the coding problems below:
    (a) Describe an exhaustive solution, and analyze compleixty (might be exponential).
+knapsack unbounded:  Suppose there are n items, consider we only use one item to fill the bag, for each item i, we can use up to W/wi. In other words, we are looking for a solution from a list of subset of size 2^m, in which m = sum(W/wi) for i = 1 to n. Hence, the  time compleixty is O(2^m).
+
+knapsack bounded: Suppose there are n items, for each each item i, there is ki copies. Let m = sum( ki) for i = 1 to n. There are 2^m subsets, namely, the time compleixty to find the best value is O(2^m)
+
+lis: Suppose we have a string of length n, the number of substring is 2^n
+then we find the longest increasing subsequence from the substring list. Therefore, the time complexity is O(2^n)
+
    (b) Describe a greedy solution, and analyze complexity.
+knapsack unbounded: Pick items with max weight-value ratio untill the bag is full. It takes O(n) time.
+
+knapsack bounded: Same as above.
+
+
    (c) Show a counterexample to the greedy solution.
+knapsack unbounded:
+Bag: 5
+item 1: (5, 4)
+item 2: (2, 2)
+item 3: (1, 1)
+
+Greedy: pick item 1, max value 4.
+Actual: item 2*2 + item 1, max value 5.
+
+knapsack bounded:
+Bag: 5
+item 1: (5, 4, 1)
+item 2: (2, 2, 3)
+item 3: (1, 1, 1)
+Greedy: pick item 1, max value 4.
+Actual: item 2*2 + item 1, max value 5.
+
+lis: It's hard to think about a wrong algorithm on purpose!
+
    (d) Theoretically, is the top-down solution faster, or the bottom-one one faster?
+Top-down is faster. The number of  computation needed is less than bottom-up.
+
    (e) Empirically, which one is faster? (Try some long random lists)
+Bottom-up
+For bounded knapsack, I tested with 500 items and a bag of weight 320:
+Bottom-up: 1.24515414238
+top-down: 3.2512409687
 
 1-Q: What are the time and space complexities?
-
-
+Let W be the weight，n be the number of items
+time complexity: O(nW)
+space complexity: O(W)
 
 2-Q: What are the time and space complexities?
-3-Q: What are the time and space complexities?
+Let W be the weight，n be the number of items
+time complexity: O(nW)
+space complexity: O(n)
 
+3-Q: What are the time and space complexities?
+Let n is length of the string.
+time complexity: O(n^2)
+space complexity: O(n)
 
 Debriefing (required!): --------------------------
 
 0. What's your name?
+Shujin Wu
 1. Approximately how many hours did you spend on this assignment?
+8 hours
 2. Would you rate it as easy, moderate, or difficult?
+moderate
 3. Did you work on it mostly alone, or mostly with other people?
-4. How deeply do you feel you understand the material it covers (0%–100%)? 
+alone
+4. How deeply do you feel you understand the material it covers (0%–100%)?
+80%
 5. Which part(s) of the course you like the most so far?
+Discussions in the Canvas.
 6. Which part(s) of the course you dislike the most so far?
+None

@@ -1,4 +1,6 @@
 import collections
+import time
+import random
 
 
 def best(weight, items):
@@ -66,15 +68,27 @@ def back_trace(weight, items, d):
 
 
 if __name__ == '__main__':
-    print(best(0, [(2, 4, 2), (3, 5, 3)]))
-    print(best(-20, [(2, 4, 2), (3, 5, 3)]))
-    print(best(2, [(2, 4, 2), (3, 5, 3)]))
-    print(best(1, [(2, 4, 2), (3, 5, 3)]))
-    print(best(5, []))
-    print(best(5, None))
-    print(best(5, [(2, 4, 2), (3, 5, 3)]))
-    print(best(3, [(2, 4, 2), (3, 5, 3)]))
-    print(best(3, [(1, 5, 2), (1, 5, 3)]))
-    print(best(3, [(1, 5, 1), (1, 5, 3)]))
-    print(best(20, [(1, 10, 6), (3, 15, 4), (2, 10, 3)]))
-    print(best(92, [(1, 6, 6), (6, 15, 7), (8, 9, 8), (2, 4, 7), (2, 20, 2)]))
+    items = []
+    for i in xrange(500):
+        items.append((random.randint(0, 20),random.randint(0, 20),random.randint(0, 10) ))
+    time1 = time.time()
+    print(best(320, items))
+    elapse = time.time() - time1
+    print(elapse)
+    time1 = time.time()
+    print(best2(320, items))
+    elapse = time.time() - time1
+    print(elapse)
+
+    # print(best(0, [(2, 4, 2), (3, 5, 3)]))
+    # print(best(-20, [(2, 4, 2), (3, 5, 3)]))
+    # print(best(2, [(2, 4, 2), (3, 5, 3)]))
+    # print(best(1, [(2, 4, 2), (3, 5, 3)]))
+    # print(best(5, []))
+    # print(best(5, None))
+    # print(best(5, [(2, 4, 2), (3, 5, 3)]))
+    # print(best(3, [(2, 4, 2), (3, 5, 3)]))
+    # print(best(3, [(1, 5, 2), (1, 5, 3)]))
+    # print(best(3, [(1, 5, 1), (1, 5, 3)]))
+    # print(best(20, [(1, 10, 6), (3, 15, 4), (2, 10, 3)]))
+    # print(best(92, [(1, 6, 6), (6, 15, 7), (8, 9, 8), (2, 4, 7), (2, 20, 2)]))

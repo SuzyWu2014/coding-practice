@@ -1,3 +1,7 @@
+import time
+import random
+
+
 def best(weight, items):
     """
     Unbounded Knapsack
@@ -45,16 +49,27 @@ def best2(weight, items):
 
 
 if __name__ == '__main__':
-    print best(3, [(2, 4), (3, 5)])
-    print best(3, [(1, 5), (1, 5)])
-    print best(3, [(1, 2), (1, 5)])
-    print best(3, [(1, 2), (2, 5)])
-    print best(58, [(5, 9), (9, 18), (6, 12)])
-    print best(92, [(8, 9), (9, 10), (10, 12), (5, 6)])
+    items = []
+    for i in xrange(50):
+        items.append((random.randint(0, 20),random.randint(0, 20)))
+    time1 = time.time()
+    print(best(32, items))
+    elapse = time.time() - time1
+    print(elapse)
+    time1 = time.time()
+    print(best2(32, items))
+    elapse = time.time() - time1
+    print(elapse)
+    # print best(3, [(2, 4), (3, 5)])
+    # print best(3, [(1, 5), (1, 5)])
+    # print best(3, [(1, 2), (1, 5)])
+    # print best(3, [(1, 2), (2, 5)])
+    # print best(58, [(5, 9), (9, 18), (6, 12)])
+    # print best(92, [(8, 9), (9, 10), (10, 12), (5, 6)])
 
-    print best2(3, [(2, 4), (3, 5)])
-    print best2(3, [(1, 5), (1, 5)])
-    print best2(3, [(1, 2), (1, 5)])
-    print best2(3, [(1, 2), (2, 5)])
-    print best2(58, [(5, 9), (9, 18), (6, 12)])
-    print best2(92, [(8, 9), (9, 10), (10, 12), (5, 6)])
+    # print best2(3, [(2, 4), (3, 5)])
+    # print best2(3, [(1, 5), (1, 5)])
+    # print best2(3, [(1, 2), (1, 5)])
+    # print best2(3, [(1, 2), (2, 5)])
+    # print best2(58, [(5, 9), (9, 18), (6, 12)])
+    # print best2(92, [(8, 9), (9, 10), (10, 12), (5, 6)])
