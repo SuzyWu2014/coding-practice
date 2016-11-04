@@ -49,15 +49,16 @@ def best2(weight, items):
 
 
 if __name__ == '__main__':
-    items = []
-    for i in xrange(50):
-        items.append((random.randint(0, 20),random.randint(0, 20)))
+    # items = []
+    # for i in xrange(50):
+    #     items.append((random.randint(0, 20),random.randint(0, 20)))
+    items = [(100, 23)]
     time1 = time.time()
-    print(best(32, items))
+    print(best(32000, items))
     elapse = time.time() - time1
-    print(elapse)
+    print("bottom-up", elapse)
     time1 = time.time()
-    print(best2(32, items))
+    print(best2(32000, items))
     elapse = time.time() - time1
     print(elapse)
     # print best(3, [(2, 4), (3, 5)])
