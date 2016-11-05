@@ -7,7 +7,7 @@
 # Design the fastest algorithm to select the n smallest numbers from these n^3 numbers.
 import heapq
 
-def n_smallest_nums(M):
+def n_smallest_maxtrix(M):
     """
     :type M: List[List[List[a]]]
     :rtype: List[a]
