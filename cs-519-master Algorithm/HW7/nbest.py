@@ -7,7 +7,7 @@ def nbest(ABs):
     def trypush(i, p, q):
         A, B = ABs[i]
         if p < n and q < n and (i, p, q) not in used:
-            heappush(h, (A[p] + B[q], i, p, q, (A[p], B[q])))
+            heappush(h, ((A[p] + B[q], A[p]), i, p, q, (A[p], B[q])))
             used.add((i, p, q))
 
     h, used = [], set()
