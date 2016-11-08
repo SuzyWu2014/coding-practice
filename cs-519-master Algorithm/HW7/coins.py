@@ -11,7 +11,10 @@ def best(V, coins):
     for v in xrange(1, V + 1):
         for i, val in enumerate(coins):
             exclude = dp[v, i - 1]
-            include = [record(dp[v - val * k, i - 1].count_type + 1, k) for k in xrange(1, (v // val) + 1) if dp[v - val * k, i - 1] is not None]
+            include = [record(dp[v - val * k, i - 1].count_type + 1, k)
+                            for k in xrange(1, (v // val) + 1)
+                                if dp[v - val * k, i - 1] is not None]
+
             dp[v, i] = min(include) if include != [] else dp[v, i]
             if exclude is not None:
                 dp[v, i] = min(exclude, dp[v, i])
