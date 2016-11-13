@@ -12,6 +12,7 @@ def lis(string):
                         if j == -1 or string[j] < string[i]])
     return back_trace(string, dp)
 
+
 def back_trace(string, dp):
     res = []
     curr = max(dp, key=dp.get)
@@ -23,8 +24,8 @@ def back_trace(string, dp):
 
 
 if __name__ == '__main__':
-    print lis("aebbcg")
-    print lis("zyx")
+    print(lis("aebbcg"))
+    print(lis("zyx"))
     print(lis("z"))
     print(lis("aaaa"))
     print(lis("aabbaacfgs"))

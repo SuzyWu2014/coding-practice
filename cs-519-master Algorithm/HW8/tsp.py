@@ -48,6 +48,15 @@ def distance(cities, src, dest):
     a, b = cities[src], cities[dest]
     return math.sqrt(pow(a[1] - b[1], 2) + pow(a[2] - b[2], 2))
 
+# def city_sets2(total_city, num_city):
+#     tmp = itertools.combinations(xrange(1, total_city), num_city)
+#     res = []
+#     for subset in tmp:
+#         tmp = 0
+#         for i in subset:
+#             tmp += 1 << i
+#         res.append(tmp)
+#     return res
 
 if __name__ == '__main__':
     print(tsp([(0, 0, 0), (1, 1, 1), (2, 1, 0), (3, 0, 1)]))
