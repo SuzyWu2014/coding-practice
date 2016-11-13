@@ -2,7 +2,6 @@
 0. (a) Describe a greedy algorithm for LIS and show a counter example.
    (b) Describe an exhaustive algorithm for TSP and analyze complexity.
 
-
 b) There are n! permutation for n cities. An exhaustive algorithm is to calculate all the distances for these n! routes and select the minimum route from them.
 
 1. Q: What are the time and space complexities?
@@ -27,6 +26,7 @@ test cases: => refer to tsp.py.
 Shujin Wu
 
 1. Approximately how many hours did you spend on this assignment?
+5 hours
 
 2. Would you rate it as easy, moderate, or difficult?
 moderate
@@ -41,5 +41,5 @@ mostly alone
 Solve problems.
 
 6. Which part(s) of the course you dislike the most so far?
-Describe a greedy algorithm that is wrong.
+To describe a greedy algorithm that is wrong. I don't see the point of coming up with a wrong algorithm.
 
