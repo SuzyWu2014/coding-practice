@@ -5,7 +5,7 @@ import math
 
 def tsp(cities):
     """
-    @cities: (index, x, y)
+    @cities: [(index, x, y)]
     """
     if cities is None or len(cities) <= 1:
         return 0
