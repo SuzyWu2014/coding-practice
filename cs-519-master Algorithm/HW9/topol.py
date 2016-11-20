@@ -1,4 +1,4 @@
-from collections import defaultdict
+from collections import defaultdict, deque
 
 
 def order(n, edges):
@@ -12,27 +12,26 @@ def order(n, edges):
     Kahn's algorithm - O(|E| + |V|)
     """
     res = []
-    nodes = set(i for i in xrange(n))
     incoming = defaultdict(int)
     outgoing = defaultdict(list)
+    visited = set()
 
     for a, b in edges:
         incoming[b] += 1
         outgoing[a].append(b)
 
-    curr = [node for node in nodes if incoming[node] == 0]
+    curr = deque([node for node in xrange(n) if incoming[node] == 0])
 
     while curr:
-        node = curr.pop(0)
-        nodes.remove(node)
+        node = curr.popleft()
         res.append(node)
         for next_node in outgoing[node]:
             incoming[next_node] -= 1
-            edges.remove((node, next_node))
+            visited.add((node, next_node))
             if incoming[next_node] == 0:
                 curr.append(next_node)
 
-    return None if edges else res
+    return None if len(edges) != len(visited) else res
 
 
 if __name__ == '__main__':
