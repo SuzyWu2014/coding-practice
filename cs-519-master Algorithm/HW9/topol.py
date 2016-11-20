@@ -8,6 +8,8 @@ def order(n, edges):
         always pick the one with the smallest id.
     @n: the number of nodes
     @edges: a list of pairs representing edges
+
+    Kahn's algorithm - O(|E| + |V|)
     """
     res = []
     nodes = set(i for i in xrange(n))
