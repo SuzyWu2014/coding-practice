@@ -105,7 +105,6 @@ def order_dfs_non_recursive(n, edges):
                             return None
                         if visit[adj_v] == State.NotVisited:
                             stack.append(adj_v)
-                            break
     return list(res)
 
 

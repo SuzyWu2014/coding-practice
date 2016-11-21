@@ -5,27 +5,17 @@ from collections import defaultdict
 
 
 def longest2(n, edges):
-    res = []
-    incoming = defaultdict(int)
-    outgoing = defaultdict(list)
-    visited = set()
-
+    ordered = order(n, edges)
+    incoming = defaultdict(list)
+    back = defaultdict(lambda: (0, -1))
     for a, b in edges:
-        incoming[b] += 1
-        outgoing[a].append(b)
+        incoming[b].append(a)
 
-    curr = deque([node for node in xrange(n) if incoming[node] == 0])
+    for node in ordered:
+        if len(incoming[node]) > 0:
+            back[node] = max([(back[pre_node][0] + 1, pre_node) for pre_node in incoming[node]])
 
-    while curr:
-        node = curr.popleft()
-        res.append(node)
-        for next_node in outgoing[node]:
-            incoming[next_node] -= 1
-            visited.add((node, next_node))
-            if incoming[next_node] == 0:
-                curr.append(next_node)
-
-    return None if len(edges) != len(visited) else res
+    return back_trace(back)
 
 def longest(n, edges):
     """
@@ -59,7 +49,7 @@ def back_trace(back):
 
 
 if __name__ == '__main__':
-    print longest(8, [(0,2), (1,2), (2,3), (2,4), (3,4), (3,5), (4,5), (5,6), (5,7)])
+    print longest(8, [(0,2), (1,2), (2,3), (2,4), (3,5),(3,4),  (4,5), (5,6), (5,7)])
     print longest(8, [(0,2), (1,2), (2,3), (2,4), (3,4), (3,5), (4,5), (5,7), (5,6)])
     print longest(8, [(0,2), (1,2), (2,3), (2,4), (4,3), (3,5), (4,5), (5,6), (5,7)])
     print longest(8, [(6,2), (1,2), (2,3), (2,4), (3,4), (3,5), (4,5), (5,0), (5,7)])
