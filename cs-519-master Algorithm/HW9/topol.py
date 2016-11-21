@@ -1,14 +1,15 @@
 from collections import defaultdict, deque
+from enum import Enum
 
 
-def order(n, edges):
+def order2(n, edges):
     """
     For a given directed graph, output a topological order if it exists.
     Tie-breaking: whenever you have a choice of vertices to explore,
         always pick the one with the smallest id.
     @n: the number of nodes
     @edges: a list of pairs representing edges
-
+    BFS
     Kahn's algorithm - O(|E| + |V|)
     """
     res = []
@@ -32,6 +33,44 @@ def order(n, edges):
                 curr.append(next_node)
 
     return None if len(edges) != len(visited) else res
+
+
+def order(n, edges):
+    """
+    For a given directed graph, output a topological order if it exists.
+    Tie-breaking: whenever you have a choice of vertices to explore,
+        always pick the one with the smallest id.
+    @n: the number of nodes
+    @edges: a list of pairs representing edges
+
+    dfs - O(|E| + |V|)
+    """
+    State = Enum('NEVER_VISITED','VISITING_NB', 'ALL_VISITED', 'CYCLE')
+    res = deque()
+    visited = defaultdict(lambda: State.NEVER_VISITED)
+    outgoing = defaultdict(list)
+    for a, b in edges:
+        outgoing[a].append(b)
+
+    def visit(node, found_cycle=False):
+        visited[node] = State.VISITING_NB
+        for next_node in outgoing[node]:
+            if visited[next_node] == State.VISITING_NB:
+                visited[next_node] = State.CYCLE
+                return "cycle"
+            if visited[next_node] == State.NEVER_VISITED:
+                visit(next_node, found_cycle)
+        else:
+            visited[node] = State.ALL_VISITED
+            res.appendleft(node)
+
+    for i in xrange(n):
+        if visited[i] == State.NEVER_VISITED:
+            visit(i)
+        if visited[i] == State.CYCLE:
+            return None
+
+    return list(res)
 
 
 if __name__ == '__main__':
