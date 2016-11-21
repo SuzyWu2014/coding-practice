@@ -3,6 +3,30 @@
 from topol import order
 from collections import defaultdict
 
+
+def longest2(n, edges):
+    res = []
+    incoming = defaultdict(int)
+    outgoing = defaultdict(list)
+    visited = set()
+
+    for a, b in edges:
+        incoming[b] += 1
+        outgoing[a].append(b)
+
+    curr = deque([node for node in xrange(n) if incoming[node] == 0])
+
+    while curr:
+        node = curr.popleft()
+        res.append(node)
+        for next_node in outgoing[node]:
+            incoming[next_node] -= 1
+            visited.add((node, next_node))
+            if incoming[next_node] == 0:
+                curr.append(next_node)
+
+    return None if len(edges) != len(visited) else res
+
 def longest(n, edges):
     """
     given a DAG (guaranteed acyclic!), output a pair (l, p)
@@ -19,19 +43,20 @@ def longest(n, edges):
     for node in ordered:
         for next_node in outgoing[node]:
             back[next_node] = (back[node][0] + 1, node)
-    print back
-    return back[max(back, key=back.get)][0], back_trace(back)
 
+    return back_trace(back)
 
 
 def back_trace(back):
     res = []
     curr = max(back, key=back.get)
+    length = back[curr][0]
     while curr > -1:
         res.append(curr)
         _, pre = back[curr]
         curr = pre
-    return list(reversed(res))
+    return length, list(reversed(res))
+
 
 if __name__ == '__main__':
     print longest(8, [(0,2), (1,2), (2,3), (2,4), (3,4), (3,5), (4,5), (5,6), (5,7)])
