@@ -17,7 +17,7 @@ def shortest(n, edges):
 
     distances[0] = 0
     while vertex:
-        node = min([(i, distances[i]) for i in vertex])[0]
+        node = min([(distances[i], i) for i in vertex])[1]
         vertex.remove(node)
         for adj_v, cost in neighbor[node]:
             alt = distances[node] + cost
