@@ -45,7 +45,7 @@ def order_dfs_recursive(n, edges):
 
     dfs - O(|E| + |V|)
     """
-    State = Enum('NEVER_VISITED','VISITING_NB', 'ALL_VISITED')
+    State = Enum('NOT_VISITED','VISITING', 'VISITED')
     res = deque()
     visited = defaultdict(lambda: State.NEVER_VISITED)
     outgoing = defaultdict(list)
@@ -53,18 +53,18 @@ def order_dfs_recursive(n, edges):
         outgoing[a].append(b)
 
     def visit(node):
-        visited[node] = State.VISITING_NB
+        visited[node] = State.VISITING
         for next_node in outgoing[node]:
-            if visited[next_node] == State.VISITING_NB:
+            if visited[next_node] == State.VISITING:
                 break
-            if visited[next_node] == State.NEVER_VISITED:
+            if visited[next_node] == State.NOT_VISITED:
                 visit(next_node)
         else:
             res.appendleft(node)
-            visited[node] = State.ALL_VISITED
+            visited[node] = State.VISITED
 
     for i in xrange(n):
-        if visited[i] == State.NEVER_VISITED:
+        if visited[i] == State.NOT_VISITED:
             visit(i)
 
     return None if len(res) < n else list(res)
