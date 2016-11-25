@@ -54,7 +54,7 @@ def best(sequence):
                         key=lambda x:(x[0], x[2])) # x[2] take larger (i + j)
 
             # key=lambda x:(x[0], -x[1]):  -x[1] means to take is_curr_matching=True over is_curr_matching=False
-            dp[i, i + size - 1] = max(dp[i, i + size - 1], tmp, key=lambda x:(x[0], -x[1]))
+            dp[i, i + size - 1] = max(dp[i, i + size - 1], tmp)
 
     return back_trace(dp, len(sequence))
 
