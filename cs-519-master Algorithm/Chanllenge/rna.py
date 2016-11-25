@@ -1,5 +1,34 @@
 from collections import defaultdict, namedtuple
 
+def best2(sequence):
+    """
+    Given an RNA sequence, such as ACAGU, we can predict its secondary structure
+       by tagging each nucleotide as (, ., or ). Each matching pair of () must be
+       AU, GC, or GU (or their mirror symmetries: UA, GC, UG).
+       We also assume pairs can _not_ cross each other.
+       The following are valid structures for ACAGU:
+    """
+    trace = namedtuple("track", "count is_curr_matching pre count_pre")
+    dp = defaultdict(lambda: trace(count=0, is_curr_matching=False, pre=float("inf"), count_pre=0))
+
+    for size in xrange(2, len(sequence) + 1):
+        for i in xrange(len(sequence) - size + 1):
+            if isPair(sequence[i], sequence[i + size - 1]):
+                dp[(i, i + size - 1)] = trace(count=dp[(i + 1, i + size - 2)].count + 1,
+                                              is_curr_matching=True,
+                                              pre=float("inf"),
+                                              count_pre=float("inf"))
+            tmp = max([trace(count=dp[(i, i + j)].count + dp[(i + j + 1, i + size - 1)].count,
+                             is_curr_matching=False,
+                             pre=i + j,
+                             count_pre=dp[(i, i + j)].count)
+                                for j in xrange(size - 1)],
+                        key=lambda x:(x[0], x[3])) # x[2] take larger (i + j)
+
+            # key=lambda x:(x[0], -x[1]):  -x[1] means to take is_curr_matching=True over is_curr_matching=False
+            dp[(i, i + size - 1)] = max(dp[(i, i + size - 1)], tmp, key=lambda x:(x[0], -x[1]))
+
+    return back_trace(dp, len(sequence))
 
 def best(sequence):
     """
@@ -15,17 +44,17 @@ def best(sequence):
     for size in xrange(2, len(sequence) + 1):
         for i in xrange(len(sequence) - size + 1):
             if isPair(sequence[i], sequence[i + size - 1]):
-                dp[(i, i + size - 1)] = trace(count=dp[(i + 1, i + size - 2)].count + 1,
+                dp[i, i + size - 1] = trace(count=dp[i + 1, i + size - 2].count + 1,
                                               is_curr_matching=True,
                                               pre=float("inf"))
-            tmp = max([trace(count=dp[(i, i + j)].count + dp[(i + j + 1, i + size - 1)].count,
+            tmp = max([trace(count=dp[i, i + j].count + dp[i + j + 1, i + size - 1].count,
                              is_curr_matching=False,
                              pre=i + j)
                                 for j in xrange(size - 1)],
                         key=lambda x:(x[0], x[2])) # x[2] take larger (i + j)
 
             # key=lambda x:(x[0], -x[1]):  -x[1] means to take is_curr_matching=True over is_curr_matching=False
-            dp[(i, i + size - 1)] = max(dp[(i, i + size - 1)], tmp, key=lambda x:(x[0], -x[1]))
+            dp[i, i + size - 1] = max(dp[i, i + size - 1], tmp, key=lambda x:(x[0], -x[1]))
 
     return back_trace(dp, len(sequence))
 
@@ -67,3 +96,4 @@ if __name__ == '__main__':
     print best("AUBBU")
     print best("AUCGUG")
     print best("UCAG")
+    print best("AUCGUGAU")
