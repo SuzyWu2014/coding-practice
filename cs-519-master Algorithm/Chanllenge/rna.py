@@ -65,6 +65,7 @@ def back_trace(dp, length):
     _back(0, length - 1, dp, letters)
     return count, "".join(letters)
 
+
 def _back(left, right, dp, letters):
     if left < right:
         count, is_curr_matching, pre = dp[(left, right)]
@@ -74,7 +75,6 @@ def _back(left, right, dp, letters):
         elif count > 0:
             _back(left, pre, dp, letters)
             _back(pre + 1, right, dp, letters)
-
 
 
 def isPair(a, b):
@@ -91,9 +91,28 @@ def isPair(a, b):
         return False
 
 
+def total(sequence):
+    """
+    Total number of all possible structures
+    """
+    dp = defaultdict(lambda: 1)
+    for size in xrange(2, len(sequence) + 1):
+        for i in xrange(len(sequence) - size + 1):
+            if isPair(sequence[i], sequence[i + size - 1]):
+                dp[i, i + size - 1] = 2
+            dp[i, i + size - 1] += dp[i + 1, i + size - 1] + dp[i, i + size - 2] - 2
+    return dp[0, len(sequence) - 1]
+
+
 if __name__ == '__main__':
     print best("ACAGU")
     print best("AUBBU")
     print best("AUCGUG")
     print best("UCAG")
     print best("AUCGUGAU")
+
+    print total("ACAGU")
+    print total("AUBBU")
+    print total("AUCGUG")
+    print total("UCAG")
+    print total("AUCGUGAU")
