@@ -85,6 +85,7 @@ def total(sequence):
 
     return dp[0, len(sequence) - 1]
 
+
 def kbest(sequence, k):
     """
     Given an RNA sequence, such as ACAGU, we can predict its secondary structure
@@ -114,15 +115,15 @@ def kbest(sequence, k):
                         for rcnt, right in dp[t + 1, i + size - 2]:
                             dp[i, i + size - 1].append((lcnt + rcnt + 1, left + ["("] + right +[")"]))
 
-    res = sorted(dp[i, i + size - 1], reverse=True)
-    return ["".join(pairs) for cnt, pairs in res[:k]]
-    # heap = []
-    # for i, (cnt, pairs) in enumerate(dp[0, len(sequence) - 1]):
-    #     if i < k:
-    #         heapq.heappush(heap, (cnt, "".join(pairs)))
-    #     elif heap[0][0] < cnt:
-    #         heapq.heapreplace(heap, (cnt, "".join(pairs)))
-
+    # res = sorted(dp[i, i + size - 1], reverse=True)
+    # return [(cnt, "".join(pairs)) for cnt, pairs in res[:k]]
+    heap = []
+    for i, (cnt, pairs) in enumerate(dp[0, len(sequence) - 1]):
+        if i < k:
+            heapq.heappush(heap, (cnt, "".join(pairs)))
+        elif heap[0][0] < cnt:
+            heapq.heapreplace(heap, (cnt, "".join(pairs)))
+    return heap
     # return [pairs for cnt, pairs in heap]
 
 
