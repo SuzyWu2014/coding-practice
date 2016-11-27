@@ -65,25 +65,23 @@ def isPair(a, b):
 def total(sequence):
     """
     Total number of all possible structures
+    GCAC G
+    0123 4
     """
-    dp = defaultdict(lambda: 1)
+    dp = defaultdict(int)
+    for i in xrange(len(sequence)):
+        dp[i, i] = 1
+        dp[i, i - 1] = 1
+
     for size in xrange(2, len(sequence) + 1):
         for i in xrange(len(sequence) - size + 1):
             if isPair(sequence[i], sequence[i + size - 1]):
-                if dp[i + 1, i + size - 2] == 1:
-                    dp[i, i + size - 1] = 2
-                else:
-                    dp[i, i + size - 1] = dp[i + 1, i + size - 2]
-            # print (i, i + size - 1), dp[i, i + size - 1]
-            dp[i, i + size - 1] += dp[i + 1, i + size -1] + dp[i, i + size - 2] - dp[i + 1, i + size - 2] - 1
-            # print (i, i + size - 1), dp[i, i + size - 1]
+                dp[i, i + size - 1] += dp[i + 1, i + size - 2]
+            dp[i, i + size - 1] += dp[i, i + size - 2]
+            for k in xrange(i + 1, i + size - 1):
+                if isPair(sequence[i + size - 1], sequence[k]):
+                    dp[i, i + size - 1] += dp[i, k - 1] * dp[k + 1, i + size - 2]
 
-            for j in xrange(1, size - 1):
-                dp[i, i + size - 1] += (dp[i, i + j] - 1) * (dp[i + j + 1, i + size - 1] - 1)
-                if dp[i, i + j] == dp[i, i + j + 1] or dp[i + j + 1, i + size - 1] == dp[i + j, i + size - 1]:
-                    break
-            # print (i, i + size - 1), dp[i, i + size - 1]
-            # print "--------------"
     return dp[0, len(sequence) - 1]
 
 def kbest(sequence, k):
@@ -158,16 +156,16 @@ if __name__ == '__main__':
     print best("AUAACCUA")
     print total("AUAACCUA")
 
-    print total("GUUAGAGUCU")
+    # print total("GUUAGAGUCU")
 
-    # print best("UUGGACUUG")
-    # print total("UUGGACUUG")
+    print best("UUGGACUUG")
+    print total("UUGGACUUG")
 
-    # print best("UUUGGCACUA")
-    # print total("UUUGGCACUA")
+    print best("UUUGGCACUA")
+    print total("UUUGGCACUA")
 
-    # print best("GAUGCCGUGUAGUCCAAAGACUUC")
-    # print total("GAUGCCGUGUAGUCCAAAGACUUC")
+    print best("GAUGCCGUGUAGUCCAAAGACUUC")
+    print total("GAUGCCGUGUAGUCCAAAGACUUC")
 
-    # print best("AGGCAUCAAACCCUGCAUGGGAGCG")
-    # print total("AGGCAUCAAACCCUGCAUGGGAGCG")
+    print best("AGGCAUCAAACCCUGCAUGGGAGCG")
+    print total("AGGCAUCAAACCCUGCAUGGGAGCG")
