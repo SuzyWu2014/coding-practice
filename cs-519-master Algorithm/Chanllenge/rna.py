@@ -1,34 +1,5 @@
 from collections import defaultdict, namedtuple
 
-def best2(sequence):
-    """
-    Given an RNA sequence, such as ACAGU, we can predict its secondary structure
-       by tagging each nucleotide as (, ., or ). Each matching pair of () must be
-       AU, GC, or GU (or their mirror symmetries: UA, GC, UG).
-       We also assume pairs can _not_ cross each other.
-       The following are valid structures for ACAGU:
-    """
-    trace = namedtuple("track", "count is_curr_matching pre count_pre")
-    dp = defaultdict(lambda: trace(count=0, is_curr_matching=False, pre=float("inf"), count_pre=0))
-
-    for size in xrange(2, len(sequence) + 1):
-        for i in xrange(len(sequence) - size + 1):
-            if isPair(sequence[i], sequence[i + size - 1]):
-                dp[(i, i + size - 1)] = trace(count=dp[(i + 1, i + size - 2)].count + 1,
-                                              is_curr_matching=True,
-                                              pre=float("inf"),
-                                              count_pre=float("inf"))
-            tmp = max([trace(count=dp[(i, i + j)].count + dp[(i + j + 1, i + size - 1)].count,
-                             is_curr_matching=False,
-                             pre=i + j,
-                             count_pre=dp[(i, i + j)].count)
-                                for j in xrange(size - 1)],
-                        key=lambda x:(x[0], x[3])) # x[2] take larger (i + j)
-
-            # key=lambda x:(x[0], -x[1]):  -x[1] means to take is_curr_matching=True over is_curr_matching=False
-            dp[(i, i + size - 1)] = max(dp[(i, i + size - 1)], tmp, key=lambda x:(x[0], -x[1]))
-
-    return back_trace(dp, len(sequence))
 
 def best(sequence):
     """
@@ -99,20 +70,104 @@ def total(sequence):
     for size in xrange(2, len(sequence) + 1):
         for i in xrange(len(sequence) - size + 1):
             if isPair(sequence[i], sequence[i + size - 1]):
-                dp[i, i + size - 1] = 2
-            dp[i, i + size - 1] += dp[i + 1, i + size - 1] + dp[i, i + size - 2] - 2
+                if dp[i + 1, i + size - 2] == 1:
+                    dp[i, i + size - 1] = 2
+                else:
+                    dp[i, i + size - 1] = dp[i + 1, i + size - 2]
+            # print (i, i + size - 1), dp[i, i + size - 1]
+            dp[i, i + size - 1] += dp[i + 1, i + size -1] + dp[i, i + size - 2] - dp[i + 1, i + size - 2] - 1
+            # print (i, i + size - 1), dp[i, i + size - 1]
+
+            for j in xrange(1, size - 1):
+                dp[i, i + size - 1] += (dp[i, i + j] - 1) * (dp[i + j + 1, i + size - 1] - 1)
+                if dp[i, i + j] == dp[i, i + j + 1] or dp[i + j + 1, i + size - 1] == dp[i + j, i + size - 1]:
+                    break
+            # print (i, i + size - 1), dp[i, i + size - 1]
+            # print "--------------"
     return dp[0, len(sequence) - 1]
 
+def kbest(sequence, k):
+    """
+    Given an RNA sequence, such as ACAGU, we can predict its secondary structure
+       by tagging each nucleotide as (, ., or ). Each matching pair of () must be
+       AU, GC, or GU (or their mirror symmetries: UA, GC, UG).
+       We also assume pairs can _not_ cross each other.
+       The following are valid structures for ACAGU:
+    """
+    trace = namedtuple("track", "count is_curr_matching pre")
+    dp = defaultdict(set)
+    # lambda: trace(count=0, is_curr_matching=False, pre=float("inf"))
+    for size in xrange(2, len(sequence) + 1):
+        for i in xrange(len(sequence) - size + 1):
+            if isPair(sequence[i], sequence[i + size - 1]):
+                dp[i, i + size - 1].add(trace(count=dp[i + 1, i + size - 2][0].count + 1,
+                                              is_curr_matching=True,
+                                              pre=float("inf")))
+            tmp = max([trace(count=dp[i, i + j].count + dp[i + j + 1, i + size - 1].count,
+                             is_curr_matching=False,
+                             pre=i + j)
+                                for j in xrange(size - 1)],
+                        key=lambda x:(x[0], x[2])) # x[2] take larger (i + j)
+
+            # key=lambda x:(x[0], -x[1]):  -x[1] means to take is_curr_matching=True over is_curr_matching=False
+            dp[i, i + size - 1] = max(dp[i, i + size - 1], tmp)
+
+    return back_trace(dp, len(sequence))
 
 if __name__ == '__main__':
-    print best("ACAGU")
-    print best("AUBBU")
-    print best("AUCGUG")
-    print best("UCAG")
-    print best("AUCGUGAU")
+    # print best("UUCAGGA")
+    # print best("GUUAGAGUCU")
+    # print best("GCACG")
+    # print best("AUAACCUUAUAGGGCUCUG")
+    # print best("UUGGACUUGAGAAAAG")
+    # print best("UCAAUGGGUAGUAAAU")
+    # print best("UUUGGCACUUUCAGA")
+    # print best("ACACACCUUGUCCGUGAA")
+    # print best("GAUGCCGUGUAGUCCAAAGACUUCACCGUUGG")
+    # print best("CGCGAAUAAAAAGGCACUGUU")
+    # print best("ACGGCCAGUAAAGGUCAUAUACGCGGAAUGACAGGUCUAUCUAC")
+    # print best("UGGGUGAGUCGCACACUCUGCGUACUCUUUCCGUAAUU")
+    # print best("AUACGUCGGGGACAAGAAUUACGG")
+    # print best("AGGCAUCAAACCCUGCAUGGGAGCACCGCCACUGGCGAUUUUGGUA")
+    # print best("CGAGGUGGCACUGACCAAACACCACCGAAAC")
+    # print best("CGCCGUCCGGGCGCGCCUUUUACGUAGAUUU")
+    # print best("CAUCGGGGUCUGAGAUGGCCAUGAAGGGCACGUACUGUUU")
+    # print best("AACCGCUGUGUCAAGCCCAUCCUGCCUUGUU")
 
+    print best("ACAGU")
     print total("ACAGU")
-    print total("AUBBU")
-    print total("AUCGUG")
-    print total("UCAG")
-    print total("AUCGUGAU")
+
+    print best("AC")
+    print total("AC")
+
+    print best("GUAC")
+    print total("GUAC")
+
+    print best("GCACG")
+    print total("GCACG")
+
+    print best("CCGG")
+    print total("CCGG")
+
+    print best("CCCGGG")
+    print total("CCCGGG")
+
+    print best("UUCAGGA")
+    print total("UUCAGGA")
+
+    print best("AUAACCUA")
+    print total("AUAACCUA")
+
+    print total("GUUAGAGUCU")
+
+    # print best("UUGGACUUG")
+    # print total("UUGGACUUG")
+
+    # print best("UUUGGCACUA")
+    # print total("UUUGGCACUA")
+
+    # print best("GAUGCCGUGUAGUCCAAAGACUUC")
+    # print total("GAUGCCGUGUAGUCCAAAGACUUC")
+
+    # print best("AGGCAUCAAACCCUGCAUGGGAGCG")
+    # print total("AGGCAUCAAACCCUGCAUGGGAGCG")
