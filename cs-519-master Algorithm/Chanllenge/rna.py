@@ -1,5 +1,5 @@
 from collections import defaultdict, namedtuple
-import heapq
+import heapq, random
 
 
 def best(sequence):
@@ -86,7 +86,7 @@ def total(sequence):
     return dp[0, len(sequence) - 1]
 
 
-def kbest(sequence, k):
+def kbest2(sequence, k):
     """
     Given an RNA sequence, such as ACAGU, we can predict its secondary structure
        by tagging each nucleotide as (, ., or ). Each matching pair of () must be
@@ -115,8 +115,6 @@ def kbest(sequence, k):
                         for rcnt, right in dp[t + 1, i + size - 2]:
                             dp[i, i + size - 1].append((lcnt + rcnt + 1, left + ["("] + right +[")"]))
 
-    # res = sorted(dp[i, i + size - 1], reverse=True)
-    # return [(cnt, "".join(pairs)) for cnt, pairs in res[:k]]
     heap = []
     for i, (cnt, pairs) in enumerate(dp[0, len(sequence) - 1]):
         if i < k:
@@ -124,8 +122,60 @@ def kbest(sequence, k):
         elif heap[0][0] < cnt:
             heapq.heapreplace(heap, (cnt, "".join(pairs)))
     return heap
-    # return [pairs for cnt, pairs in heap]
 
+
+def qselect(k, pairs):
+    """
+    Find the kth smallest element in the array
+    """
+    if k <= 0 or pairs is None or len(pairs) == 0:
+        return
+    if k > len(pairs):
+        k = len(pairs)
+    pivot_cnt, pivot_str = random.choice(pairs)
+    left = [ppair for ppair in pairs if ppair[0] < pivot_cnt]
+    right = [ppair for ppair in pairs if ppair[0] > pivot_cnt]
+    if k <= len(left):
+        return qselect(k, left)
+    elif k > len(pairs) - len(right):
+        return qselect(k - (len(pairs) - len(right)), right)
+    else:
+        return pivot_cnt, pivot_str
+
+def kbest(sequence, k):
+    pair = defaultdict(lambda:[(0, '.')])
+
+    for size in xrange(2, len(sequence) + 1):
+        for i in xrange(len(sequence) - size + 1):
+            klist = []
+            # i and j are paired
+            if isPair(sequence[i], sequence[i + size - 1]):
+                for cnt, pre in pair[i + 1, i + size - 2]:
+                    if len(klist) < k or cnt >= klist[0][0]:
+                        heapq.heappush(klist, (cnt + 1, '(' + pre + ')'))
+
+            # i and j are not paired
+            for cnt, pre in pair[i, i + size - 2]:
+                if len(klist) < k or cnt >= klist[0][0]:
+                    heapq.heappush(klist, (cnt, pre + '.'))
+
+            for t in xrange(i + 1, i + size - 1):
+                if isPair(sequence[i + size - 1], sequence[t]):
+                    for lcnt, left in pair[i, t - 1]:
+                        for rcnt, right in pair[t + 1, i + size - 2]:
+                            if len(klist) < k or lcnt + rcnt + 1 >= klist[0][0]:
+                                heapq.heappush(klist, (lcnt + rcnt + 1, left + '(' + right + ')'))
+            # select k best options
+            kth_ele = qselect(k, klist)
+            pair[i, i + size - 1] = [ppair for ppair in klist if ppair[0] >= kth_ele[0]]
+
+    tmp = map(lambda x: (-x[0], x[1]), pair[0, len(sequence) - 1])
+    heapq.heapify(tmp)
+    res = []
+    for i in xrange(k):
+        cnt, string = heapq.heappop(tmp)
+        res.append((-cnt, string))
+    return res
 
 if __name__ == '__main__':
     # print best("UUCAGGA")
