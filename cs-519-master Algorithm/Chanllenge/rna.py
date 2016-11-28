@@ -97,6 +97,8 @@ def kbest(sequence, k):
             j = i + size - 1
 
             # initialize the candidates in the heap
+            cnt, pre = pair[i, j - 1][0]
+            klist.append((-cnt, float("inf"), 0, 0, pre + '.'))
             for t in xrange(i, j):
                 if isPair(sequence[t], sequence[j]):
                     lcnt, left = pair[i, t - 1][0]
@@ -105,10 +107,9 @@ def kbest(sequence, k):
                     klist.append(rec(count=-lcnt - rcnt - 1,
                         splt=t, lft_idx=0, rgt_idx=0, rst=left + '(' + right + ')'))
 
-            cnt, pre = pair[i, j - 1][0]
-            klist.append((-cnt, float("inf"), 0, 0, pre + '.'))
             heapq.heapify(klist)
 
+            # Get k best options
             while len(pair[i, j]) < k and len(klist) > 0:
                 cnt, t, lidx, ridx, candi = heapq.heappop(klist)
                 pair[i, j].append((-cnt, candi))
