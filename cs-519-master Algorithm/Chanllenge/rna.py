@@ -145,7 +145,7 @@ def qselect(k, pairs):
         return pivot_cnt, pivot_str
 
 
-def kbest(sequence, k):
+def kbest2(sequence, k):
     pair = defaultdict(list)
     for i in xrange(len(sequence) + 1):
         pair[i, i].append((0, '.'))
@@ -186,6 +186,51 @@ def kbest(sequence, k):
     return res
 
 
+def kbest(sequence, k):
+    pair = defaultdict(list)
+    for i in xrange(len(sequence) + 1):
+        pair[i, i].append((0, '.'))
+        pair[i, i - 1].append((0, ''))
+
+    for size in xrange(2, len(sequence) + 1):
+        for i in xrange(len(sequence) - size + 1):
+            klist, kset = [], set()
+            j = i + size - 1
+            for t in xrange(i, j):
+                if isPair(sequence[t], sequence[j]):
+                    lcnt, left = pair[i, t - 1][0]
+                    rcnt, right = pair[t + 1, j - 1][0]
+                    kset.add((t, 0, 0))
+                    heapq.heappush(klist, (-lcnt - rcnt - 1,
+                                           t, 0, 0, left + '(' + right + ')'))
+
+            cnt, pre = pair[i, j - 1][0]
+            heapq.heappush(klist, (-cnt, float("inf"), 0, 0, pre + '.'))
+
+            while len(pair[i, j]) < k and len(klist) > 0:
+                cnt, t, lidx, ridx, candi = heapq.heappop(klist)
+                pair[i, j].append((-cnt, candi))
+                if t == float("inf"):
+                    if lidx + 1 < len(pair[i, j - 1]):
+                        ccnt, ppre = pair[i, j - 1][lidx + 1]
+                        heapq.heappush(klist, (-ccnt, float("inf"), lidx + 1, 0, ppre + '.'))
+                else:
+                    lcnt, left = pair[i, t - 1][lidx]
+                    rcnt, right = pair[t + 1, j - 1][ridx]
+                    if lidx + 1 < len(pair[i, t - 1]) and (t, lidx + 1, ridx) not in kset:
+                        llcnt, lleft = pair[i, t - 1][lidx + 1]
+                        kset.add((t, lidx + 1, ridx))
+                        heapq.heappush(klist, (-llcnt - rcnt - 1,
+                                               t, lidx + 1, ridx, lleft + '(' + right + ')'))
+
+                    if ridx + 1 < len(pair[t + 1, j - 1]) and (t, lidx, ridx + 1) not in kset:
+                        rrcnt, rright = pair[t + 1, j - 1][ridx + 1]
+                        kset.add((t, lidx, ridx + 1))
+                        heapq.heappush(klist, (-lcnt - rrcnt - 1,
+                                               t, lidx, ridx + 1, left + '(' + rright + ')'))
+
+    return pair[0, len(sequence) - 1]
+
 if __name__ == '__main__':
     # print best("UUCAGGA")
     # print best("GUUAGAGUCU")
@@ -206,14 +251,14 @@ if __name__ == '__main__':
     # print best("CAUCGGGGUCUGAGAUGGCCAUGAAGGGCACGUACUGUUU")
     # print best("AACCGCUGUGUCAAGCCCAUCCUGCCUUGUU")
 
-    print best("ACAGU")
-    print total("ACAGU")
-    print kbest("ACAGU", 10)
-    print "-----------------------"
-    print best("AC")
-    print total("AC")
-    print kbest("AC", 10)
-    print "-----------------------"
+    # print best("ACAGU")
+    # print total("ACAGU")
+    # print kbest("ACAGU", 10)
+    # print "-----------------------"
+    # print best("AC")
+    # print total("AC")
+    # print kbest("AC", 10)
+    # print "-----------------------"
     print best("GUAC")
     print total("GUAC")
     print kbest("GUAC", 10)
@@ -244,12 +289,12 @@ if __name__ == '__main__':
     print "-----------------------"
     print best("UUUGGCACUA")
     print total("UUUGGCACUA")
-    print kbest("UUUGGCACUA", 1)
+    print kbest("UUUGGCACUA", 100)
     print "-----------------------"
     print best("GAUGCCGUGUAGUCCAAAGACUUC")
     print total("GAUGCCGUGUAGUCCAAAGACUUC")
-    print kbest("GAUGCCGUGUAGUCCAAAGACUUC", 1)
+    print kbest("GAUGCCGUGUAGUCCAAAGACUUC", 100)
     print "-----------------------"
     print best("AGGCAUCAAACCCUGCAUGGGAGCG")
     print total("AGGCAUCAAACCCUGCAUGGGAGCG")
-    print kbest("AGGCAUCAAACCCUGCAUGGGAGCG", 1)
+    print kbest("AGGCAUCAAACCCUGCAGGCAUCAAACCCUGCAGCCUGCAGGCAUCAAACCCUGCAGGCAUCAAACCCUGAUGGGAGCG", 1000)
