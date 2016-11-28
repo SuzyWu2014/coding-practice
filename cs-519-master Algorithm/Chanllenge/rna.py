@@ -103,7 +103,8 @@ def kbest_naive(sequence, k):
     for size in xrange(2, len(sequence) + 1):
         for i in xrange(len(sequence) - size + 1):
             if isPair(sequence[i], sequence[i + size - 1]):
-                new = [(cnt + 1, ["("] + pre + [")"]) for cnt, pre in dp[i + 1, i + size - 2]]
+                new = [(cnt + 1, ["("] + pre + [")"])
+                    for cnt, pre in dp[i + 1, i + size - 2]]
                 dp[i, i + size - 1].extend(new)
 
             dp[i, i + size - 1].extend([(cnt, pre + ["."])
@@ -113,7 +114,8 @@ def kbest_naive(sequence, k):
                 if isPair(sequence[i + size - 1], sequence[t]):
                     for lcnt, left in dp[i, t - 1]:
                         for rcnt, right in dp[t + 1, i + size - 2]:
-                            dp[i, i + size - 1].append((lcnt + rcnt + 1, left + ["("] + right +[")"]))
+                            dp[i, i + size - 1].append(
+                                (lcnt + rcnt + 1, left + ["("] + right +[")"]))
 
     heap = []
     for i, (cnt, pairs) in enumerate(dp[0, len(sequence) - 1]):
@@ -142,6 +144,7 @@ def qselect(k, pairs):
     else:
         return pivot_cnt, pivot_str
 
+
 def kbest(sequence, k):
     pair = defaultdict(list)
     for i in xrange(len(sequence) + 1):
@@ -166,11 +169,13 @@ def kbest(sequence, k):
                     for lcnt, left in pair[i, t - 1]:
                         for rcnt, right in pair[t + 1, i + size - 2]:
                             if len(klist) < k or lcnt + rcnt + 1 >= klist[0][0]:
-                                heapq.heappush(klist, (lcnt + rcnt + 1, left + '(' + right + ')'))
-
+                                heapq.heappush(
+                                    klist, (lcnt + rcnt + 1,
+                                            left + '(' + right + ')'))
             # select k best options
             kth_ele = qselect(k, klist)
-            pair[i, i + size - 1] = [ppair for ppair in klist if ppair[0] >= kth_ele[0]]
+            pair[i, i + size - 1] = [ppair for ppair in klist
+                                    if ppair[0] >= kth_ele[0]]
 
     tmp = map(lambda x: (-x[0], x[1]), pair[0, len(sequence) - 1])
     heapq.heapify(tmp)
@@ -179,6 +184,7 @@ def kbest(sequence, k):
         cnt, string = heapq.heappop(tmp)
         res.append((-cnt, string))
     return res
+
 
 if __name__ == '__main__':
     # print best("UUCAGGA")

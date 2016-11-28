@@ -1,0 +1,27 @@
+1. best()
+
+Time complexity:
+Let p[i, j] be the subproblem.
+=> There are n different sizes of subproblem; size k = j - i + 1 ranging from 1 to n
+=> For each size of subproblem, there are n - k alternatives
+    => It takes O(k) to calculate each sub problem
+    => Therefore, it takes O((n - k)*k) = O(nk) to compute each size of the subprablem.
+=> Traceback: O(n), best case O(log n)
+
+Hence, T(n) = sum(nk) for k = 1 to n
+            = n * (1 + 2 + 3 + ... + n)
+            = O(n^3)
+
+Space complexity:
+I stored a tuple for each subproblem, there are total n^2 subproblems,
+Therefore, the space complexity is O(n^2)
+
+2. total()
+Similar as above:
+Time complexity T(n) = O(n^3)
+Space complexity = O(n^2)
+
+3. kbest()
+
+
+
