@@ -126,15 +126,15 @@ def kbest_naive(sequence, k):
 
 def qselect(k, pairs):
     """
-    Find the kth smallest element in the array
+    Find the kth largest element in the pairs
     """
     if k <= 0 or pairs is None or len(pairs) == 0:
         return
     if k > len(pairs):
         k = len(pairs)
     pivot_cnt, pivot_str = random.choice(pairs)
-    left = [ppair for ppair in pairs if ppair[0] < pivot_cnt]
-    right = [ppair for ppair in pairs if ppair[0] > pivot_cnt]
+    left = [ppair for ppair in pairs if ppair[0] > pivot_cnt]
+    right = [ppair for ppair in pairs if ppair[0] < pivot_cnt]
     if k <= len(left):
         return qselect(k, left)
     elif k > len(pairs) - len(right):
@@ -175,7 +175,7 @@ def kbest(sequence, k):
     tmp = map(lambda x: (-x[0], x[1]), pair[0, len(sequence) - 1])
     heapq.heapify(tmp)
     res = []
-    for i in xrange(k):
+    for i in xrange(min(k, len(tmp))):
         cnt, string = heapq.heappop(tmp)
         res.append((-cnt, string))
     return res
@@ -202,15 +202,15 @@ if __name__ == '__main__':
 
     print best("ACAGU")
     print total("ACAGU")
-    print kbest("ACAGU", 1)
+    print kbest("ACAGU", 10)
     print "-----------------------"
     print best("AC")
     print total("AC")
-    print kbest("AC", 1)
+    print kbest("AC", 10)
     print "-----------------------"
     print best("GUAC")
     print total("GUAC")
-    print kbest("GUAC", 1)
+    print kbest("GUAC", 10)
     print "-----------------------"
     print best("GCACG")
     print total("GCACG")
