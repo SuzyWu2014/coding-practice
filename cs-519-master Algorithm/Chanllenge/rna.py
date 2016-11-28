@@ -86,7 +86,7 @@ def total(sequence):
     return dp[0, len(sequence) - 1]
 
 
-def kbest2(sequence, k):
+def kbest_naive(sequence, k):
     """
     Given an RNA sequence, such as ACAGU, we can predict its secondary structure
        by tagging each nucleotide as (, ., or ). Each matching pair of () must be
@@ -98,7 +98,7 @@ def kbest2(sequence, k):
     dp = defaultdict(list)
     for i in xrange(len(sequence)):
         dp[i, i].append((0, ["."]))
-        dp[i, i - 1].append((0, ["."]))
+        dp[i, i - 1].append((0, [""]))
 
     for size in xrange(2, len(sequence) + 1):
         for i in xrange(len(sequence) - size + 1):
@@ -143,7 +143,10 @@ def qselect(k, pairs):
         return pivot_cnt, pivot_str
 
 def kbest(sequence, k):
-    pair = defaultdict(lambda:[(0, '.')])
+    pair = defaultdict(list)
+    for i in xrange(len(sequence) + 1):
+        pair[i, i].append((0, '.'))
+        pair[i, i - 1].append((0, ''))
 
     for size in xrange(2, len(sequence) + 1):
         for i in xrange(len(sequence) - size + 1):
@@ -153,7 +156,6 @@ def kbest(sequence, k):
                 for cnt, pre in pair[i + 1, i + size - 2]:
                     if len(klist) < k or cnt >= klist[0][0]:
                         heapq.heappush(klist, (cnt + 1, '(' + pre + ')'))
-
             # i and j are not paired
             for cnt, pre in pair[i, i + size - 2]:
                 if len(klist) < k or cnt >= klist[0][0]:
@@ -165,6 +167,7 @@ def kbest(sequence, k):
                         for rcnt, right in pair[t + 1, i + size - 2]:
                             if len(klist) < k or lcnt + rcnt + 1 >= klist[0][0]:
                                 heapq.heappush(klist, (lcnt + rcnt + 1, left + '(' + right + ')'))
+
             # select k best options
             kth_ele = qselect(k, klist)
             pair[i, i + size - 1] = [ppair for ppair in klist if ppair[0] >= kth_ele[0]]
@@ -200,38 +203,47 @@ if __name__ == '__main__':
     print best("ACAGU")
     print total("ACAGU")
     print kbest("ACAGU", 1)
-
-    # print best("AC")
-    # print total("AC")
-
-    # print best("GUAC")
-    # print total("GUAC")
-
-    # print best("GCACG")
-    # print total("GCACG")
-
-    # print best("CCGG")
-    # print total("CCGG")
-
-    # print best("CCCGGG")
-    # print total("CCCGGG")
-
-    # print best("UUCAGGA")
-    # print total("UUCAGGA")
-
-    # print best("AUAACCUA")
-    # print total("AUAACCUA")
-
-    # # print total("GUUAGAGUCU")
-
-    # print best("UUGGACUUG")
-    # print total("UUGGACUUG")
-
-    # print best("UUUGGCACUA")
-    # print total("UUUGGCACUA")
-
-    # print best("GAUGCCGUGUAGUCCAAAGACUUC")
-    # print total("GAUGCCGUGUAGUCCAAAGACUUC")
-
-    # print best("AGGCAUCAAACCCUGCAUGGGAGCG")
-    # print total("AGGCAUCAAACCCUGCAUGGGAGCG")
+    print "-----------------------"
+    print best("AC")
+    print total("AC")
+    print kbest("AC", 1)
+    print "-----------------------"
+    print best("GUAC")
+    print total("GUAC")
+    print kbest("GUAC", 1)
+    print "-----------------------"
+    print best("GCACG")
+    print total("GCACG")
+    print kbest("GCACG", 1)
+    print "-----------------------"
+    print best("CCGG")
+    print total("CCGG")
+    print kbest("CCGG", 1)
+    print "-----------------------"
+    print best("CCCGGG")
+    print total("CCCGGG")
+    print kbest("CCCGGG", 1)
+    print "-----------------------"
+    print best("UUCAGGA")
+    print total("UUCAGGA")
+    print kbest("UUCAGGA", 1)
+    print "-----------------------"
+    print best("AUAACCUA")
+    print total("AUAACCUA")
+    print kbest("AUAACCUA", 1)
+    print "-----------------------"
+    print best("UUGGACUUG")
+    print total("UUGGACUUG")
+    print kbest("UUGGACUUG", 1)
+    print "-----------------------"
+    print best("UUUGGCACUA")
+    print total("UUUGGCACUA")
+    print kbest("UUUGGCACUA", 1)
+    print "-----------------------"
+    print best("GAUGCCGUGUAGUCCAAAGACUUC")
+    print total("GAUGCCGUGUAGUCCAAAGACUUC")
+    print kbest("GAUGCCGUGUAGUCCAAAGACUUC", 1)
+    print "-----------------------"
+    print best("AGGCAUCAAACCCUGCAUGGGAGCG")
+    print total("AGGCAUCAAACCCUGCAUGGGAGCG")
+    print kbest("AGGCAUCAAACCCUGCAUGGGAGCG", 1)
