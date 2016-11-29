@@ -85,23 +85,22 @@ def total(sequence):
 
 
 def kbest(sequence, k):
-    pair = defaultdict(list)
+    pair, mem = dict(), dict()
     rec = namedtuple("rec", "count splt lft_idx rgt_idx")
     for i in xrange(len(sequence) + 1):
-        pair[i, i].append((0, float("inf"), 0, 0))
-        pair[i, i - 1].append((0, float("inf"), 0, 0))
+        pair[i, i] = iter([(0, float("inf"), 0, 0)])
+        pair[i, i - 1] = iter([(0, float("inf"), 0, 0)])
 
     for size in xrange(2, len(sequence) + 1):
         for i in xrange(len(sequence) - size + 1):
             klist, j = [], i + size - 1
-
             # initialize the candidates in the heap
-            cnt, _, _, _ = pair[i, j - 1][0]
+            cnt = memorize_iter(pair, mem, i, j - 1, 0)[0]
             klist.append((-cnt, float("inf"), 0, 0))
             for t in xrange(i, j):
                 if isPair(sequence[t], sequence[j]):
-                    lcnt, _, _, _ = pair[i, t - 1][0]
-                    rcnt, _, _, _ = pair[t + 1, j - 1][0]
+                    lcnt = memorize_iter(pair, mem, i, t - 1, 0)[0]
+                    rcnt = memorize_iter(pair, mem, t + 1, j - 1, 0)[0]
                     klist.append(rec(count=-lcnt - rcnt - 1,
                         splt=t, lft_idx=0, rgt_idx=0))
             if len(klist) > k:
@@ -110,26 +109,128 @@ def kbest(sequence, k):
             heapq.heapify(klist)
 
             # Get k best options
-            while len(pair[i, j]) < k and len(klist) > 0:
-                cnt, t, lidx, ridx = heapq.heappop(klist)
-                pair[i, j].append((-cnt, t, lidx, ridx))
-                if t == float("inf"):
-                    if lidx + 1 < len(pair[i, j - 1]):
-                        ccnt, _, _, _ = pair[i, j - 1][lidx + 1]
-                        heapq.heappush(klist, (-ccnt, float("inf"), lidx + 1, 0))
-                else:
-                    lcnt, _, _, _ = pair[i, t - 1][lidx]
-                    rcnt, _, _, _ = pair[t + 1, j - 1][ridx]
-                    if lidx + 1 < len(pair[i, t - 1]):
-                        llcnt, _, _, _ = pair[i, t - 1][lidx + 1]
-                        heapq.heappush(klist, (-llcnt - rcnt - 1,
-                                               t, lidx + 1, ridx))
+            pair[i, j] = gen_k_options(pair, mem, i, j, k, klist)
 
-                    if ridx + 1 < len(pair[t + 1, j - 1]):
-                        rrcnt, _, _, _ = pair[t + 1, j - 1][ridx + 1]
-                        heapq.heappush(klist, (-lcnt - rrcnt - 1,
-                                               t, lidx, ridx + 1))
-    return list(kback(pair, len(sequence)))
+    # return list(pair[0, len(sequence) - 1])
+    return list(kback(pair, mem, len(sequence), k))
+
+def memorize_iter(pair, mem, i, j, idx):
+    # print "\n--------memorize_iter-----------------\n"
+    if (i, j, idx) not in mem:
+        try:
+            mem[(i, j, idx)] = pair[i, j].next()
+            print "new", (i, j, idx), mem[(i, j, idx)]
+            return mem[i, j, idx]
+        except Exception as e:
+            print "memorize_iter\n", e
+            pass
+    else:
+        print "old", (i, j, idx), mem[(i, j, idx)]
+        return mem[(i, j, idx)]
+
+
+def gen_k_options(pair, mem, i, j, k, klist):
+    print "--------gen_k_options-----------------"
+    c = 0
+    while c < k and len(klist) > 0:
+        cnt, t, lidx, ridx = heapq.heappop(klist)
+        yield (-cnt, t, lidx, ridx)
+        if t == float("inf"):
+            try:
+                ccnt = memorize_iter(pair, mem, i, j - 1, lidx + 1)[0]
+                heapq.heappush(klist, (-ccnt, float("inf"), lidx + 1, 0))
+                c += 1
+            except:
+                pass
+        else:
+            lcnt = memorize_iter(pair, mem, i, t - 1, lidx)[0]
+            rcnt = memorize_iter(pair, mem, t + 1, j - 1, ridx)[0]
+            try:
+                next_lcnt = memorize_iter(pair, mem, i, t - 1, lidx + 1)[0]
+                heapq.heappush(klist, (-next_lcnt - rcnt - 1,
+                                       t, lidx + 1, ridx))
+                c += 1
+            except Exception as e:
+                print "gen_k_options", e
+                pass
+            try:
+                next_rcnt = memorize_iter(pair, mem, t + 1, j - 1, ridx + 1)[0]
+                heapq.heappush(klist, (-lcnt - next_rcnt - 1,
+                                       t, lidx, ridx + 1))
+                c += 1
+            except Exception as e:
+                print "gen_k_options", e
+                pass
+
+
+def kback(pair, mem, size, k):
+    for idx in xrange(k):
+        letters = ["."] * size
+        try:
+            cnt = memorize_iter(pair, mem, 0, size - 1, idx)[0]
+            print idx, "--------kback-----------------"
+            _kback(pair, mem, 0, size - 1, idx, letters)
+            yield (cnt, "".join(letters))
+        except:
+            pass
+
+
+def _kback(pair, mem, i, j, idx, letters):
+    if i < j:
+        _, t, lidx, ridx = memorize_iter(pair, mem, i, j, idx)
+        if t == float("inf"):
+            _kback(pair, mem, i, j - 1, lidx, letters)
+        else:
+            letters[t], letters[j] = "(", ")"
+            _kback(pair, mem, i, t - 1, lidx, letters)
+            _kback(pair, mem, t + 1, j - 1, ridx, letters)
+
+# def kbest(sequence, k):
+#     pair = defaultdict(list)
+#     rec = namedtuple("rec", "count splt lft_idx rgt_idx")
+#     for i in xrange(len(sequence) + 1):
+#         pair[i, i].append((0, float("inf"), 0, 0))
+#         pair[i, i - 1].append((0, float("inf"), 0, 0))
+
+#     for size in xrange(2, len(sequence) + 1):
+#         for i in xrange(len(sequence) - size + 1):
+#             klist, j = [], i + size - 1
+
+#             # initialize the candidates in the heap
+#             cnt, _, _, _ = pair[i, j - 1][0]
+#             klist.append((-cnt, float("inf"), 0, 0))
+#             for t in xrange(i, j):
+#                 if isPair(sequence[t], sequence[j]):
+#                     lcnt, _, _, _ = pair[i, t - 1][0]
+#                     rcnt, _, _, _ = pair[t + 1, j - 1][0]
+#                     klist.append(rec(count=-lcnt - rcnt - 1,
+#                         splt=t, lft_idx=0, rgt_idx=0))
+#             if len(klist) > k:
+#                 kth = qselect(k, klist)
+#                 klist = [record for record in klist if record.count <= kth.count]
+#             heapq.heapify(klist)
+
+#             # Get k best options
+#             while len(pair[i, j]) < k and len(klist) > 0:
+#                 cnt, t, lidx, ridx = heapq.heappop(klist)
+#                 pair[i, j].append((-cnt, t, lidx, ridx))
+#                 if t == float("inf"):
+#                     if lidx + 1 < len(pair[i, j - 1]):
+#                         ccnt, _, _, _ = pair[i, j - 1][lidx + 1]
+#                         heapq.heappush(klist, (-ccnt, float("inf"), lidx + 1, 0))
+#                 else:
+#                     lcnt, _, _, _ = pair[i, t - 1][lidx]
+#                     rcnt, _, _, _ = pair[t + 1, j - 1][ridx]
+#                     if lidx + 1 < len(pair[i, t - 1]):
+#                         llcnt, _, _, _ = pair[i, t - 1][lidx + 1]
+#                         heapq.heappush(klist, (-llcnt - rcnt - 1,
+#                                                t, lidx + 1, ridx))
+
+#                     if ridx + 1 < len(pair[t + 1, j - 1]):
+#                         rrcnt, _, _, _ = pair[t + 1, j - 1][ridx + 1]
+#                         heapq.heappush(klist, (-lcnt - rrcnt - 1,
+#                                                t, lidx, ridx + 1))
+#     return list(kback(pair, len(sequence)))
 
 
 def qselect(k, klist):
@@ -149,32 +250,32 @@ def qselect(k, klist):
         return pivot
 
 
-def kback(pair, size):
-    for i, (cnt, _, _, _) in enumerate(pair[0, size - 1]):
-        letters = ["."] * size
-        _kback(pair, 0, size - 1, i, letters)
-        yield (cnt, "".join(letters))
+# def kback(pair, size):
+#     for i, (cnt, _, _, _) in enumerate(pair[0, size - 1]):
+#         letters = ["."] * size
+#         _kback(pair, 0, size - 1, i, letters)
+#         yield (cnt, "".join(letters))
 
 
-def _kback(pair, i, j, idx, letters):
-    if i < j:
-        _, t, lidx, ridx = pair[i, j][idx]
-        if t == float("inf"):
-            _kback(pair, i, j - 1, lidx, letters)
-        else:
-            letters[t], letters[j] = "(", ")"
-            _kback(pair, i, t - 1, lidx, letters)
-            _kback(pair, t + 1, j - 1, ridx, letters)
+# def _kback(pair, i, j, idx, letters):
+#     if i < j:
+#         _, t, lidx, ridx = pair[i, j][idx]
+#         if t == float("inf"):
+#             _kback(pair, i, j - 1, lidx, letters)
+#         else:
+#             letters[t], letters[j] = "(", ")"
+#             _kback(pair, i, t - 1, lidx, letters)
+#             _kback(pair, t + 1, j - 1, ridx, letters)
 
 
 if __name__ == '__main__':
-    print best("ACAGU")
-    print total("ACAGU")
-    print kbest("ACAGU", 10)
-    print "-----------------------"
-    print best("UUUGGCACUA")
-    print total("UUUGGCACUA")
-    print kbest("UUUGGCACUA", 10)
+    # print best("ACAGU")
+    # print total("ACAGU")
+    # print kbest("ACAGU", 10)
+    # print "-----------------------"
+    # print best("UUUGGCACUA")
+    # print total("UUUGGCACUA")
+    # print kbest("UUUGGCACUA", 10)
     print "-----------------------"
     print best("GAUGCCGUGUAGUCCAAAGACUUC")
     print total("GAUGCCGUGUAGUCCAAAGACUUC")
