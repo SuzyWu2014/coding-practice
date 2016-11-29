@@ -1,5 +1,5 @@
 from collections import defaultdict, namedtuple
-import heapq
+import heapq, random
 
 
 def best(sequence):
@@ -104,6 +104,9 @@ def kbest(sequence, k):
                     rcnt, _, _, _ = pair[t + 1, j - 1][0]
                     klist.append(rec(count=-lcnt - rcnt - 1,
                         splt=t, lft_idx=0, rgt_idx=0))
+            if len(klist) > k:
+                kth = qselect(k, klist)
+                klist = [record for record in klist if record.count <= kth.count]
             heapq.heapify(klist)
 
             # Get k best options
@@ -127,6 +130,23 @@ def kbest(sequence, k):
                         heapq.heappush(klist, (-lcnt - rrcnt - 1,
                                                t, lidx, ridx + 1))
     return list(kback(pair, len(sequence)))
+
+
+def qselect(k, klist):
+    """
+    Find the kth smallest element in the klist (-count)
+    """
+    if k <= 0 or klist is None or len(klist) == 0:
+        return
+    pivot = random.choice(klist)
+    left = [ppair for ppair in klist if ppair.count < pivot.count]
+    right = [ppair for ppair in klist if ppair.count > pivot.count]
+    if k <= len(left):
+        return qselect(k, left)
+    elif k > len(klist) - len(right):
+        return qselect(k - (len(klist) - len(right)), right)
+    else:
+        return pivot
 
 
 def kback(pair, size):
@@ -160,6 +180,6 @@ if __name__ == '__main__':
     print total("GAUGCCGUGUAGUCCAAAGACUUC")
     print kbest("GAUGCCGUGUAGUCCAAAGACUUC", 10)
     print "-----------------------"
-    print best("AGGCAUCAAACCCUGCAUGGGAGCG")
-    print total("AGGCAUCAAACCCUGCAUGGGAGCG")
-    print kbest("AGGCAUCAAACCCUGCAGGCAUCAAACCCUGCAGCCUGCAGGCAUCAAACCCUGCAGGCAUCAAACCCUGAUGGGAGCG", 100)
+    # print best("AGGCAUCAAACCCUGCAUGGGAGCG")
+    # print total("AGGCAUCAAACCCUGCAUGGGAGCG")
+    # print kbest("AGGCAUCAAACCCUGCAGGCAUCAAACCCUGCAGCCUGCAGGCAUCAAACCCUGCAGGCAUCAAACCCUGAUGGGAGCG", 100)

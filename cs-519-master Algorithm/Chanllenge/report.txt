@@ -29,11 +29,10 @@ Let p[i, j] be the subproblem.
     => It costs O(t) to intialize a candidate heap by using heapify
     => It costs O(klog t) to get k best options from the heap
 => Therefore, it takes O((n - t)*(t + klog t)) = O(nt + nklog t) to compute each size of the subproblem.
-
+=> O(nk) to back tracking
 Hence, T(n) = sum(nt + nklog t) for t = 1 to n
             = n * (1 + 2 + 3 + ... + n) + nk*(log 1 + log 2 + ...log n)
             = O(n^3 + n^2 * klog n)
-Note: if considering the time complextity to construct the string for each candidate, the total complexity will increase to O(n^4)
 
 Space Complexity: O(k * n^2)
 => O(n^2) number of subproblems
@@ -41,8 +40,6 @@ Space Complexity: O(k * n^2)
 => at most heap of size n
 
 Therefore: O(k * n^2 + n) = O(k * n^2)
-
-Similarily, if consider the space complexity for long strings, the total grow to O(k * n^3)
 
 Debriefing (required!): --------------------------
 
