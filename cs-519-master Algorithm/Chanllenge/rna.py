@@ -93,8 +93,7 @@ def kbest(sequence, k):
 
     for size in xrange(2, len(sequence) + 1):
         for i in xrange(len(sequence) - size + 1):
-            klist, kset = [], set()
-            j = i + size - 1
+            klist, j = [], i + size - 1
 
             # initialize the candidates in the heap
             cnt, pre = pair[i, j - 1][0]
@@ -103,10 +102,8 @@ def kbest(sequence, k):
                 if isPair(sequence[t], sequence[j]):
                     lcnt, left = pair[i, t - 1][0]
                     rcnt, right = pair[t + 1, j - 1][0]
-                    kset.add((t, 0, 0))
                     klist.append(rec(count=-lcnt - rcnt - 1,
                         splt=t, lft_idx=0, rgt_idx=0, rst=left + '(' + right + ')'))
-
             heapq.heapify(klist)
 
             # Get k best options
@@ -120,15 +117,13 @@ def kbest(sequence, k):
                 else:
                     lcnt, left = pair[i, t - 1][lidx]
                     rcnt, right = pair[t + 1, j - 1][ridx]
-                    if lidx + 1 < len(pair[i, t - 1]) and (t, lidx + 1, ridx) not in kset:
+                    if lidx + 1 < len(pair[i, t - 1]):
                         llcnt, lleft = pair[i, t - 1][lidx + 1]
-                        kset.add((t, lidx + 1, ridx))
                         heapq.heappush(klist, (-llcnt - rcnt - 1,
                                                t, lidx + 1, ridx, lleft + '(' + right + ')'))
 
-                    if ridx + 1 < len(pair[t + 1, j - 1]) and (t, lidx, ridx + 1) not in kset:
+                    if ridx + 1 < len(pair[t + 1, j - 1]):
                         rrcnt, rright = pair[t + 1, j - 1][ridx + 1]
-                        kset.add((t, lidx, ridx + 1))
                         heapq.heappush(klist, (-lcnt - rrcnt - 1,
                                                t, lidx, ridx + 1, left + '(' + rright + ')'))
 
