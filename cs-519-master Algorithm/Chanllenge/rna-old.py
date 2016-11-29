@@ -231,6 +231,52 @@ def kbest(sequence, k):
 
     return pair[0, len(sequence) - 1]
 
+
+def kbest2(sequence, k):
+    pair = defaultdict(list)
+    rec = namedtuple("rec", "count splt lft_idx rgt_idx rst")
+    for i in xrange(len(sequence) + 1):
+        pair[i, i].append((0, '.'))
+        pair[i, i - 1].append((0, ''))
+
+    for size in xrange(2, len(sequence) + 1):
+        for i in xrange(len(sequence) - size + 1):
+            klist, j = [], i + size - 1
+
+            # initialize the candidates in the heap
+            cnt, pre = pair[i, j - 1][0]
+            klist.append((-cnt, float("inf"), 0, 0, pre + '.'))
+            for t in xrange(i, j):
+                if isPair(sequence[t], sequence[j]):
+                    lcnt, left = pair[i, t - 1][0]
+                    rcnt, right = pair[t + 1, j - 1][0]
+                    klist.append(rec(count=-lcnt - rcnt - 1,
+                        splt=t, lft_idx=0, rgt_idx=0, rst=left + '(' + right + ')'))
+            heapq.heapify(klist)
+
+            # Get k best options
+            while len(pair[i, j]) < k and len(klist) > 0:
+                cnt, t, lidx, ridx, candi = heapq.heappop(klist)
+                pair[i, j].append((-cnt, candi))
+                if t == float("inf"):
+                    if lidx + 1 < len(pair[i, j - 1]):
+                        ccnt, ppre = pair[i, j - 1][lidx + 1]
+                        heapq.heappush(klist, (-ccnt, float("inf"), lidx + 1, 0, ppre + '.'))
+                else:
+                    lcnt, left = pair[i, t - 1][lidx]
+                    rcnt, right = pair[t + 1, j - 1][ridx]
+                    if lidx + 1 < len(pair[i, t - 1]):
+                        llcnt, lleft = pair[i, t - 1][lidx + 1]
+                        heapq.heappush(klist, (-llcnt - rcnt - 1,
+                                               t, lidx + 1, ridx, lleft + '(' + right + ')'))
+
+                    if ridx + 1 < len(pair[t + 1, j - 1]):
+                        rrcnt, rright = pair[t + 1, j - 1][ridx + 1]
+                        heapq.heappush(klist, (-lcnt - rrcnt - 1,
+                                               t, lidx, ridx + 1, left + '(' + rright + ')'))
+
+    return pair[0, len(sequence) - 1]
+
 if __name__ == '__main__':
     # print best("UUCAGGA")
     # print best("GUUAGAGUCU")

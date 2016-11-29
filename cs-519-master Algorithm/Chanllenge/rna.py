@@ -86,48 +86,66 @@ def total(sequence):
 
 def kbest(sequence, k):
     pair = defaultdict(list)
-    rec = namedtuple("rec", "count splt lft_idx rgt_idx rst")
+    rec = namedtuple("rec", "count splt lft_idx rgt_idx")
     for i in xrange(len(sequence) + 1):
-        pair[i, i].append((0, '.'))
-        pair[i, i - 1].append((0, ''))
+        pair[i, i].append((0, float("inf"), 0, 0))
+        pair[i, i - 1].append((0, float("inf"), 0, 0))
 
     for size in xrange(2, len(sequence) + 1):
         for i in xrange(len(sequence) - size + 1):
             klist, j = [], i + size - 1
 
             # initialize the candidates in the heap
-            cnt, pre = pair[i, j - 1][0]
-            klist.append((-cnt, float("inf"), 0, 0, pre + '.'))
+            cnt, _, _, _ = pair[i, j - 1][0]
+            klist.append((-cnt, float("inf"), 0, 0))
             for t in xrange(i, j):
                 if isPair(sequence[t], sequence[j]):
-                    lcnt, left = pair[i, t - 1][0]
-                    rcnt, right = pair[t + 1, j - 1][0]
+                    lcnt, _, _, _ = pair[i, t - 1][0]
+                    rcnt, _, _, _ = pair[t + 1, j - 1][0]
                     klist.append(rec(count=-lcnt - rcnt - 1,
-                        splt=t, lft_idx=0, rgt_idx=0, rst=left + '(' + right + ')'))
+                        splt=t, lft_idx=0, rgt_idx=0))
             heapq.heapify(klist)
 
             # Get k best options
             while len(pair[i, j]) < k and len(klist) > 0:
-                cnt, t, lidx, ridx, candi = heapq.heappop(klist)
-                pair[i, j].append((-cnt, candi))
+                cnt, t, lidx, ridx = heapq.heappop(klist)
+                pair[i, j].append((-cnt, t, lidx, ridx))
                 if t == float("inf"):
                     if lidx + 1 < len(pair[i, j - 1]):
-                        ccnt, ppre = pair[i, j - 1][lidx + 1]
-                        heapq.heappush(klist, (-ccnt, float("inf"), lidx + 1, 0, ppre + '.'))
+                        ccnt, _, _, _ = pair[i, j - 1][lidx + 1]
+                        heapq.heappush(klist, (-ccnt, float("inf"), lidx + 1, 0))
                 else:
-                    lcnt, left = pair[i, t - 1][lidx]
-                    rcnt, right = pair[t + 1, j - 1][ridx]
+                    lcnt, _, _, _ = pair[i, t - 1][lidx]
+                    rcnt, _, _, _ = pair[t + 1, j - 1][ridx]
                     if lidx + 1 < len(pair[i, t - 1]):
-                        llcnt, lleft = pair[i, t - 1][lidx + 1]
+                        llcnt, _, _, _ = pair[i, t - 1][lidx + 1]
                         heapq.heappush(klist, (-llcnt - rcnt - 1,
-                                               t, lidx + 1, ridx, lleft + '(' + right + ')'))
+                                               t, lidx + 1, ridx))
 
                     if ridx + 1 < len(pair[t + 1, j - 1]):
-                        rrcnt, rright = pair[t + 1, j - 1][ridx + 1]
+                        rrcnt, _, _, _ = pair[t + 1, j - 1][ridx + 1]
                         heapq.heappush(klist, (-lcnt - rrcnt - 1,
-                                               t, lidx, ridx + 1, left + '(' + rright + ')'))
+                                               t, lidx, ridx + 1))
+    return list(kback(pair, len(sequence)))
 
-    return pair[0, len(sequence) - 1]
+
+def kback(pair, size):
+    for i, (cnt, _, _, _) in enumerate(pair[0, size - 1]):
+        letters = ["."] * size
+        _kback(pair, 0, size - 1, i, letters)
+        yield (cnt, "".join(letters))
+
+
+def _kback(pair, i, j, idx, letters):
+    if i < j:
+        _, t, lidx, ridx = pair[i, j][idx]
+        if t == float("inf"):
+            _kback(pair, i, j - 1, lidx, letters)
+        else:
+            letters[t], letters[j] = "(", ")"
+            _kback(pair, i, t - 1, lidx, letters)
+            _kback(pair, t + 1, j - 1, ridx, letters)
+
 
 if __name__ == '__main__':
     print best("ACAGU")
@@ -136,11 +154,11 @@ if __name__ == '__main__':
     print "-----------------------"
     print best("UUUGGCACUA")
     print total("UUUGGCACUA")
-    print kbest("UUUGGCACUA", 100)
+    print kbest("UUUGGCACUA", 10)
     print "-----------------------"
     print best("GAUGCCGUGUAGUCCAAAGACUUC")
     print total("GAUGCCGUGUAGUCCAAAGACUUC")
-    print kbest("GAUGCCGUGUAGUCCAAAGACUUC", 100)
+    print kbest("GAUGCCGUGUAGUCCAAAGACUUC", 10)
     print "-----------------------"
     print best("AGGCAUCAAACCCUGCAUGGGAGCG")
     print total("AGGCAUCAAACCCUGCAUGGGAGCG")
