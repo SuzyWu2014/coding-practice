@@ -111,35 +111,30 @@ def kbest(sequence, k):
             # Get k best options
             pair[i, j] = gen_k_options(pair, mem, i, j, k, klist)
 
-    # return list(pair[0, len(sequence) - 1])
     return list(kback(pair, mem, len(sequence), k))
 
+
 def memorize_iter(pair, mem, i, j, idx):
-    # print "\n--------memorize_iter-----------------\n"
     if (i, j, idx) not in mem:
         try:
             mem[(i, j, idx)] = pair[i, j].next()
-            print "new", (i, j, idx), mem[(i, j, idx)]
             return mem[i, j, idx]
-        except Exception as e:
-            print "memorize_iter\n", e
+        except:
             pass
     else:
-        print "old", (i, j, idx), mem[(i, j, idx)]
         return mem[(i, j, idx)]
 
 
 def gen_k_options(pair, mem, i, j, k, klist):
-    print "--------gen_k_options-----------------"
     c = 0
     while c < k and len(klist) > 0:
         cnt, t, lidx, ridx = heapq.heappop(klist)
+        c += 1
         yield (-cnt, t, lidx, ridx)
         if t == float("inf"):
             try:
                 ccnt = memorize_iter(pair, mem, i, j - 1, lidx + 1)[0]
                 heapq.heappush(klist, (-ccnt, float("inf"), lidx + 1, 0))
-                c += 1
             except:
                 pass
         else:
@@ -149,30 +144,27 @@ def gen_k_options(pair, mem, i, j, k, klist):
                 next_lcnt = memorize_iter(pair, mem, i, t - 1, lidx + 1)[0]
                 heapq.heappush(klist, (-next_lcnt - rcnt - 1,
                                        t, lidx + 1, ridx))
-                c += 1
-            except Exception as e:
-                print "gen_k_options", e
+            except:
                 pass
             try:
                 next_rcnt = memorize_iter(pair, mem, t + 1, j - 1, ridx + 1)[0]
                 heapq.heappush(klist, (-lcnt - next_rcnt - 1,
                                        t, lidx, ridx + 1))
-                c += 1
-            except Exception as e:
-                print "gen_k_options", e
+            except:
                 pass
 
 
 def kback(pair, mem, size, k):
-    for idx in xrange(k):
+    idx = 0
+    while idx < k:
         letters = ["."] * size
         try:
             cnt = memorize_iter(pair, mem, 0, size - 1, idx)[0]
-            print idx, "--------kback-----------------"
             _kback(pair, mem, 0, size - 1, idx, letters)
             yield (cnt, "".join(letters))
+            idx += 1
         except:
-            pass
+            break
 
 
 def _kback(pair, mem, i, j, idx, letters):
@@ -281,6 +273,7 @@ if __name__ == '__main__':
     print total("GAUGCCGUGUAGUCCAAAGACUUC")
     print kbest("GAUGCCGUGUAGUCCAAAGACUUC", 10)
     print "-----------------------"
-    # print best("AGGCAUCAAACCCUGCAUGGGAGCG")
-    # print total("AGGCAUCAAACCCUGCAUGGGAGCG")
-    # print kbest("AGGCAUCAAACCCUGCAGGCAUCAAACCCUGCAGCCUGCAGGCAUCAAACCCUGCAGGCAUCAAACCCUGAUGGGAGCG", 100)
+
+    print best("AGGCAUCAAACCCUGCAUGGGAGCG")
+    print total("AGGCAUCAAACCCUGCAUGGGAGCG")
+    print kbest("AGGCAUCAAACCCUGCAGGCAUCAAACCCUGCAGCCUGCAGGCAUCAAACCCUGCAGGCAUCAAACCCUGAUGGGAGCG", 100)
