@@ -1,0 +1,95 @@
+1. best()
+
+Time complexity:
+Let p[i, j] be the subproblem.
+=> There are n different sizes of subproblem; size k = j - i + 1 ranging from 1 to n
+=> For each size of subproblem, there are n - k alternatives
+    => It takes O(k) to calculate each sub problem
+    => Therefore, it takes O((n - k)*k) = O(nk) to compute each size of the subproblem.
+=> Traceback: O(n), best case O(log n)
+
+Hence, T(n) = sum(nk) for k = 1 to n
+            = n * (1 + 2 + 3 + ... + n)
+            = O(n^3)
+
+Space complexity:
+I stored a tuple for each subproblem, there are total n^2 subproblems,
+Therefore, the space complexity is O(n^2)
+
+2. total()
+Similar as above:
+Time complexity T(n) = O(n^3)
+Space complexity = O(n^2)
+
+3. kbest(seq, k)
+----------------------------------------------------------------------
+Bottom-up version:
+----------------------------------------------------------------------
+Time complexity:
+Let p[i, j] be the subproblem.
+=> There are n different sizes of subproblem; size t = j - i + 1 ranging from 1 to n
+=> For each size of subproblem, there are n - t pairs
+    => It costs O(t) to initialize a candidate list
+    => It costs O(t) to quickselect kth largest element, and create the candidate of size k
+    => It costs O(k) to heapify
+    => It costs O(klog k) to get k best options from the heap
+=> Therefore, it takes O((n - t)*(t + klogk)) = O(nt + nklogk) to compute each size of the subproblem.
+=> O(nk) to back tracking
+Hence, T(n) = sum(nt + nklog t) for t = 1 to n
+            = n * (1 + 2 + 3 + ... + n) + n^2 * klog k
+            = O(n^3 + n^2 * klog k)
+
+Space Complexity: O(k * n^2)
+=> O(n^2) number of subproblems
+=> at most k best values for each subproblem
+=> at most heap of size n
+
+Therefore: O(k * n^2 + n) = O(k * n^2)
+----------------------------------------------------------------------
+Top-down version (which I submitted):
+----------------------------------------------------------------------
+Time complexity:
+Let p[i, j] be the subproblem.
+=> There are n different sizes of subproblem; size t = j - i + 1 ranging from 1 to n
+=> For each size of subproblem, there are n - t pairs
+    => It costs O(t) to initialize a candidate list
+    => It costs O(t) to quickselect kth largest element, and create the candidate of size k
+    => It costs O(k) to heapify
+=> Therefore, it takes O((n - t)*(2t + k)) = O(nt) to compute each size of the subproblem.
+=> It costs O(klog k) to get k best options from the heap
+=> O(nk) to back tracking
+
+Hence, T(n) = sum(nt) for t = 1 to n
+            = n * (1 + 2 + 3 + ... + n) + nk + klog k
+            = O(n^3 + nk + klog n)
+
+Space Complexity: O(n^2 + kn)
+=> O(n^2) number of subproblems
+=> at most k best values for string a size n
+
+Therefore: O(n^2 + kn)
+
+
+Debriefing (required!): --------------------------
+
+0. What's your name?
+Shujin Wu
+
+1. Approximately how many hours did you spend on this assignment?
+2d
+
+2. Would you rate it as easy, moderate, or difficult?
+difficult but interesting
+
+3. Did you work on it mostly alone, or mostly with other people?
+Mostly alone but discussed with Zheng Zhou when stuck on problem #2
+
+4. How deeply do you feel you understand the material it covers (0%–100%)?
+85%
+
+5. Which part(s) of the course you like the most so far?
+Trying to implement a better solution.
+
+6. Which part(s) of the course you dislike the most so far?
+The coming final.
+

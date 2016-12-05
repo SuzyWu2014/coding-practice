@@ -1,0 +1,22 @@
+
+Debriefing (required!): --------------------------
+
+1. Approximately how many hours did you spend on this assignment?
+    3 hours
+
+2. Would you rate it as easy, moderate, or difficult?
+    moderate
+
+3. Did you work on it mostly alone, or mostly with other people?
+   Note you are encouraged to discuss with your classmates,
+   but each students should submit his/her own code.
+   mostly alone, and discussed with Zheng Zhou afterwards
+
+4. How deeply do you feel you understand the material it covers (0%–100%)?
+    90%
+[UPDATE]
+5. Which part(s) of the course you like the most so far?
+    Explain homework problems with related algorithms/data structures
+
+6. Which part(s) of the course you dislike the most so far?
+    Spend too much time on explaining Homework/quiz.

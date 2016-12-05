@@ -2,7 +2,7 @@
 
 ## 14. How to get k-best shortest path using Viterbi?
 
-Vertex: 
+Vertex:
 
 ## 15. For single-source single-sink shortest paths on DAGs with non-negative weights, which one is faster, Dijkstra or Viterbi?
 

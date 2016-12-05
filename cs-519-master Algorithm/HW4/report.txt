@@ -1,0 +1,75 @@
+0. There are two methods for building a heap from an unsorted array:
+   (1) insert each element into the heap  --- O(nlogn)
+   (2) heapify (top-down)                 --- O(n)
+
+   (a) (theoretically) Derive their time complexities.
+
+==> 1: T(n) = O(n) * O(log n) = O(nlog n)
+    It takes O(log n) to insert one element into the heap, and there is n elements need to be inserted.
+
+==> 2: For a balanced tree, at each level i, the numbers of tree node is around n/2^i, for each sub tree rooted at node x, it takes O(i) to adjust the tree to a heap, so each level takes O(i) *O(n/2^i), i ranges from 1 to log n. Therefore, the total complexity is O(n) when summing up all levels.
+
+   (b) (empirically)   Use a long list of random numbers to show the difference in time. What about sorted or reversely-sorted numbers?
+
+with heappush         with heapify
+-------------------------------------------------------
+random lists of size 10000, 100000, 1000000:
+-------------------------------------------------------
+0.0102829933167       0.00698590278625
+0.0933690071106       0.0553829669952
+0.903342962265        0.548058986664
+-------------------------------------------------------
+reversely-sorted lists of size 10000, 100000, 1000000:
+-------------------------------------------------------
+0.0514249801636       0.00743389129639
+0.519330024719        0.053601026535
+6.4016392231          0.596711874008
+
+As shown above, with heapify operation, the time spent on building the heap grew linearly. Namely, the time complexity is linear. On the other hand, with heappush operation, it's slower than utilizing heapify operation to build the heap.
+
+1.    Q: What are the time complexities of these algorithms?
+nbesta => O(n^2 log n^2) for sorting a list of n^2 elements
+nbestb => O(n ^ 2) for qselect from a list of n^2 elements
+nbestc => O(n log n)
+
+2.    Q: What is the complexity? Write down the detailed analysis in report.txt.
+=> It takes O(n) to divide the list into k lists
+=> To merge a k sorted list, it takes O(k) to heapify,
+    O(log k * n ) to get a merged sorted list via heap
+We have:
+    T(n) = O(n) + O(k) + O(n log k) + k * T(n/k)
+         = O(n log k) + k * T(n/k)     ---// O(n log k) > O(n) > O(k)
+         = sum((k^i) *(n/k^i) * log k) ---//i = 1 to log n/log k
+         = sum( n * log k) -- total # of level: log n/log k
+         = (n * log k) * (log n/log k)
+         = n log n
+
+3.Q: What is your complexity? Write down the detailed analysis in report.txt.
+=> n log k
+
+=> It takes O(n) to traverse the list, and it takes O(log k) to insert/pop elements to/from a heap of size k.
+=> O(k log k) to sort the final list
+=> since k << n
+=> Therefore, T(n) = O(n log k)
+
+Debriefing (required!): --------------------------
+
+1. Approximately how many hours did you spend on this assignment?
+    5 h
+
+2. Would you rate it as easy, moderate, or difficult?
+    Moderate
+
+3. Did you work on it mostly alone, or mostly with other people?
+   Note you are encouraged to discuss with your classmates,
+   but each students should submit his/her own code.
+   Work alone to finish the code, then discuss with others for the report
+
+4. How deeply do you feel you understand the material it covers (0%–100%)?
+    90%
+
+5. Which part(s) of the course you like the most so far?
+    Solve the problems.
+
+6. Which part(s) of the course you dislike the most so far?
+    I would say don't try to squeeze the quiz questions into one page, it would be a lot nicer if you print it double-sided.
