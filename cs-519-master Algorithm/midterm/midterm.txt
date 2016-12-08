@@ -1,0 +1,20 @@
+#2 Give two reasons why the following is wrong. We can improve "bubble-down" from O(log n) to O(log log n) by doing binary search from the root to leaves to find the right position to place the current number. A path is at most O(log n) long, and binary search on it takes O(log logn)time, so bubble-down could run in O(log log n) time.
+
+reason 1: Heap is not necessarily a binary search tree, we can't do binary search on it.
+
+reason 2: To perform binary search on a binary search tree of size n, it takes O(log n) to find a position instead of O(log log n)
+
+#5
+
+d. b and c are both dynamic programming
+
+#6
+
+f.
+Recurrence Relation:
+subproblem[v, i]: the minimal number of types of coins used to add up to value v. coin types are limited from type 0 to type i.
+
+subproblem[v, i] = min( min(subproblem[v - j*v_i]) + 1, subproblem[v, i - 1])
+                    for j = 1 to v / vi
+
+base case: subproblem[0, i] = 0

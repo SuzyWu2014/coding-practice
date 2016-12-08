@@ -1,0 +1,48 @@
+0. Compare two recursive implementations of fib (naive vs. memoized).
+   (a) What's exact complexity of naive in theory?
+T(n) = T(n - 1) + T(n - 2) = O(2 ^ n); This is the upper bound, the exact complexity is approximately 1.6 ^ n.
+
+   (b) Let's say you know it's O(a^n); can you curve-fit to determine the approximate value of a?
+   Suppose we have: T(n) = O(a^n) + c
+   Then we have:    log(T(n)) = n log a + c
+        For function f(n) = kn +b ==> f(n): log(T(n))
+    By utilizing gnuplot:
+        k = 0.43079
+        b = - 14.752
+    we have log a == k, Therefore a = 1.53
+
+   (c) Does this value match the theoretical complexity?
+        Almost.
+
+1. What's the complexity?
+Top-down version: - Memorizing the current sum, position of previous item
+It takes O(n) to compute the maximum sum, and another O(n) to backtrack and get the independant set. Therefore, it takes O(n) time to get the max independant weight set.
+
+Bottom-up version: - Memorizing the current sum and the independant set
+
+Because it takes O(n) time to construct a new list in each iteration, and there is n interations. In total, the complexity is O(n^2).
+
+
+2.
+   What's the complexity of this DP?
+   O(n^2)
+
+   What's the name of this famous number series?
+   Catalan number
+
+Debriefing (required!): --------------------------
+
+0. What's your name?
+    Shujin Wu
+1. Approximately how many hours did you spend on this assignment?
+    5 Hours
+2. Would you rate it as easy, moderate, or difficult?
+    Moderate
+3. Did you work on it mostly alone, or mostly with other people?
+    Mostly alone
+4. How deeply do you feel you understand the material it covers (0%–100%)?
+    90 %
+5. Which part(s) of the course you like the most so far?
+    Discuss the internal implementations/special features in python which we might not notice.
+6. Which part(s) of the course you dislike the most so far?
+    Quiz.

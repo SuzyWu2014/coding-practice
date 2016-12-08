@@ -1,0 +1,69 @@
+1. Topological sort
+
+Time complexity:
+-> O(|E|) to convert the graph into adjacency list
+-> O(|V|) to obtain the starting nodes
+-> sum(# of outwarding edges for node i) = O(|E|) to produce the topological order.
+
+Therefore: T(n) = O(|E| +|V|)
+
+Space complexity:
+-> O(|E|) for ajacency list
+-> O(|V|) for status of each node(visited or not)
+
+Hence: O(|E| + |V|)
+
+2, viterbi
+
+Time Complexity:
+-> O(|E| + |V|) to obtain a topological order
+-> O(|E|)  to convert the graph into adjacency list
+-> sum(# of outwarding edges for node i) = O(|E|) to update longest path ending at each node.
+-> O(|V|) to back trace the path
+
+Therefore, T(n) = O(|E| + |V|)
+
+Space Complexity:
+-> O(|E|) for adjacency list
+-> O(|V|) for dp table
+In total: O(|E| + |V|)
+
+3, Dijkstra
+Time Complexity:
+-> O(E) to construct the adjacency list
+-> O(|V|) to pop all nodes from the heap
+    -> O(log V) to pop node with min distance from the heap
+    -> O(k log V) to update the priority heap; k is # of outwarding edges for each node i
+    -> In total, |V|log|V| + sum(k log|V|) = (|V| + |E|)log|V|
+
+Therefore: T(n) = (|V| + |E|)log|V|
+
+Space complexity:
+-> O(|V|) for priority heap
+-> O(|E|) for adjacency list
+
+In total: O(|E| + |V|)
+
+Debriefing (required!): --------------------------
+
+0. What's your name?
+Shujin Wu
+
+1. Approximately how many hours did you spend on this assignment?
+7 Hours
+
+2. Would you rate it as easy, moderate, or difficult?
+Moderate
+
+3. Did you work on it mostly alone, or mostly with other people?
+Mostly alone, sometimes discussed with Zheng Zhou
+
+4. How deeply do you feel you understand the material it covers (0%–100%)?
+90%
+
+5. Which part(s) of the course you like the most so far?
+Discussions about a better implementation.
+
+6. Which part(s) of the course you dislike the most so far?
+Sometimes it takes huge effort to see what you wrote in the blackboard.
+

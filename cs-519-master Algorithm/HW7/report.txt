@@ -1,0 +1,49 @@
+1
+(a)
+    time complexity: O(klog K) + O(nlog K)
+    space: O(K)
+(b) Describe two improvements to make it faster (for the cases where k>>n).
+    Analyze their time complexities.
+
+    1，Use heapify instead of trypush() to build the inital heap.
+        T(n) = O(k) + O(nlog K)
+        space: O(k)
+    2, maintain a heap of size n
+    Solution #1
+        => O(n) to build a inital heap
+        => O(k log n) to maintain a heap of n smallest items from ABs[i][0][0]
+        => O(n log n) to get n smallest items
+     time complexity T(n) = O(Klog n + n log n)
+     space: O(n)
+    Solution #2
+        => O(K) to quickselect nth smallest element from ABs[i][0][0]
+        => O(K) to pick n smallest elements from ABs[i[0][0]
+        => O(n) to heapify heap of size n
+        => O(n log n) to get n smallest items
+      time complexity: O(k + nlog n)
+      space: O(n)
+
+2, Let V be the target value, n be the total type of coins
+time complexity: T(n) = O(VM) where M = sum(V/n_i)
+space: O(Vn)
+
+
+
+Debriefing (required!): --------------------------
+
+0. What's your name?
+Shujin Wu
+1. Approximately how many hours did you spend on this assignment?
+3 hours
+2. Would you rate it as easy, moderate, or difficult?
+moderate
+3. Did you work on it mostly alone, or mostly with other people?
+alone
+4. How deeply do you feel you understand the material it covers (0%–100%)?
+90%
+
+[NEW QUESTIONS]
+5. Did you like the Midterm? If not, which part(s) do you dislike the most?
+No, too many questions in 50 mins.
+6. Do you feel this HW (as a second-chance to midterm or as a take-home quiz) is helpful?
+Yes.
