@@ -1,7 +1,0 @@
-Quiz 1
-
-#3 Insertion sort can be implemented as an O(nlog n) algorithm by doing binary search to find the right place to insert (O(log n)), and by using linked-list whose insertion costs O(1). True or False? Justify your answer.
-
-False. We can't do binary search on linked-list, it costs O(n) for linked-list to find the right position to insert, in total, it should still be O(n^2).
-
-In addition, it costs O(log n) to find the right place to insert for a binary search tree only if it's a balanced binary search tree.
